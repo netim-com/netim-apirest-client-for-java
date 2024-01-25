@@ -16,6 +16,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
@@ -35,79 +36,83 @@ public class APIRest implements AutoCloseable
     private int _lastHttpStatus;
     private String _lastResponse;
     private String _lastError;
-    private String _defaultLanguage;
+    private Map<String, String> _preferences;
 
 
-    /**
-     * Constructor for class APIRest
-     *
-     * @param userID the ID the client uses to connect to his NETIM account
-     * @param secret the SECRET the client uses to connect to his NETIM account
-     *	 
-     * @throws Exception if userID, secret, url are empty or missing.
-     * 
-     */
-    public APIRest(String userID, String secret) throws Exception
-    {
-        InputStream in = this.getClass().getResourceAsStream("/conf.xml");
-        //File f = new File("./conf.xml");
-        ObjectMapper objectMapper = new XmlMapper();
-        TypeReference<HashMap<String, String>> typeRef 
-                = new TypeReference<HashMap<String, String>>() {};
-        //FileInputStream fs = new FileInputStream(f);
-        HashMap<String, String> conf = objectMapper.readValue(in, typeRef);
+	/**
+	 * Constructor for class APIRest
+	 *
+	 * @param userID the ID the client uses to connect to his NETIM account
+	 * @param secret the SECRET the client uses to connect to his NETIM account
+	 *
+	 * @throws Exception if userID, secret, url are empty or missing.
+	 *
+	 */
+	public APIRest(String userID, String secret) throws Exception {
+		InputStream in = this.getClass().getResourceAsStream("/conf.xml");
 
-        in.close();
+		ObjectMapper objectMapper = new XmlMapper();
+		TypeReference<HashMap<String, Object>> typeRef = new TypeReference<HashMap<String, Object>>() {};
 
-        this._userID = userID;
-        this._secret = secret;
+		HashMap<String, Object> conf = objectMapper.readValue(in, typeRef);
 
-        this.setConf(conf);
-    }
+		in.close();
 
-    /**
-     * Constructor for class APIRest
-     *	 
-     * @throws Exception if userID, secret, url are empty or missing in conf.
-     * 
-     */
-    public APIRest() throws Exception
-    {
-        File f = new File("./conf.xml");
-        ObjectMapper objectMapper = new XmlMapper();
-        TypeReference<HashMap<String,String>> typeRef 
-                = new TypeReference<HashMap<String,String>>() {};
-        FileInputStream fs = new FileInputStream(f);
-        HashMap<String,String> conf = objectMapper.readValue(fs, typeRef);
+		this._userID = userID;
+		this._secret = secret;
 
-        fs.close();
+		this.setConf(conf);
+	}
 
-        this._connected = false;
-        this._sessionID = null;
+	/**
+	 * Constructor for class APIRest
+	 *
+	 * @throws Exception if userID, secret, url are empty or missing in conf.
+	 *
+	 */
+	public APIRest() throws Exception {
+		File f = new File("./conf.xml");
+		ObjectMapper objectMapper = new XmlMapper();
+		TypeReference<HashMap<String, Object>> typeRef = new TypeReference<HashMap<String, Object>>() {};
+		FileInputStream fs = new FileInputStream(f);
+		HashMap<String, Object> conf = objectMapper.readValue(fs, typeRef);
 
-        if(!conf.containsKey("login") || conf.get("login").isEmpty())
-            throw new NetimAPIException("Missing or empty <login> in conf file.");
-        if(!conf.containsKey("secret") || conf.get("secret").isEmpty())
-            throw new NetimAPIException("Missing or empty <secret> in conf file.");
-        
-        this._userID = conf.get("login");
-        this._secret = conf.get("secret");
-        
-        this.setConf(conf);
-    }
+		fs.close();
 
-    private void setConf(HashMap<String,String> conf) throws Exception
-    {
-        if(!conf.containsKey("url") || conf.get("url").isEmpty())
-            throw new NetimAPIException("Missing or empty <url> in conf file.");
-        this._apiURL = conf.get("url");
-            
-        
-        if(conf.containsKey("language") && (conf.get("language").equals("EN") || conf.get("language").equals("FR")))
-            this._defaultLanguage = conf.get("language");
-        else
-            this._defaultLanguage = "EN";
-    }
+		this._connected = false;
+		this._sessionID = null;
+
+		if (!conf.containsKey("login") || conf.get("login").toString().isEmpty()) {
+			throw new NetimAPIException("Missing or empty <login> in conf file.");
+		}
+		if (!conf.containsKey("secret") || conf.get("secret").toString().isEmpty()) {
+			throw new NetimAPIException("Missing or empty <secret> in conf file.");
+		}
+
+		this._userID = conf.get("login").toString();
+		this._secret = conf.get("secret").toString();
+
+		this.setConf(conf);
+	}
+
+	private void setConf(HashMap<String, Object> conf) throws Exception {
+		// API URL
+		if (!conf.containsKey("url") || conf.get("url").toString().isEmpty()) {
+			throw new NetimAPIException("Missing or empty <url> in conf file.");
+		}
+		this._apiURL = conf.get("url").toString();
+
+		// Session preferences
+		this._preferences = new HashMap<String, String>();
+
+		if (conf.containsKey("preferences") && conf.get("preferences") instanceof LinkedHashMap<?, ?>) {
+			LinkedHashMap<String, String> preferences = (LinkedHashMap<String, String>) conf.get("preferences");
+
+			preferences.forEach((key, value) -> {
+				this._preferences.put(key, value);
+			});
+		}
+	}
 
     @Override
     public void close() throws NetimAPIException {
@@ -140,28 +145,40 @@ public class APIRest implements AutoCloseable
                 return null;
             
             //Call the REST ressource
-            ObjectMapper mapper = new ObjectMapper();
-
-            StringWriter sw = new StringWriter();
-            mapper.writeValue(sw, params);
+			StringWriter sw = new StringWriter();
+			ObjectMapper mapper = new ObjectMapper();
+			
             HttpResponse response;
             if(this.isSessionOpen(ressource, httpVerb))
             {
                 String auth = this._userID + ":" + this._secret;
                 byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(StandardCharsets.UTF_8));
 
+				String language = "EN";
+				String body = "";
+
+				if(this._preferences != null) {
+					if (this._preferences.containsKey("lang")) {
+						language = this._preferences.get("lang");
+					}
+					mapper.writeValue(sw, Map.of("preferences", this._preferences));
+					body = sw.toString();
+				}
+
                 HttpClient client = HttpClient.newHttpClient();
                 HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(this._apiURL + "session/"))
-                    .method("POST", HttpRequest.BodyPublishers.ofString(""))
+                    .method("POST", HttpRequest.BodyPublishers.ofString(body))
                     .header("Content-Type", "application/json")
-                    .header("Accept-Language", this._defaultLanguage)
+                    .header("Accept-Language", language)
                     .header("Authorization", "Basic " + new String(encodedAuth))
                     .build();
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
             }
             else
             {
+				mapper.writeValue(sw, params);
+
                 HttpClient client = HttpClient.newHttpClient();
                 HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(this._apiURL + ressource))
@@ -449,7 +466,10 @@ public class APIRest implements AutoCloseable
     */
     public String hello() throws NetimAPIException
     {
-        return call("hello/", HttpVerb.GET, String.class);
+		HashMap<String,Object> params = new HashMap<String, Object>();
+        params.put("IDSession", this._sessionID);
+
+        return call("hello/", HttpVerb.POST, params, String.class);
     }
 
     /**
