@@ -146,7 +146,7 @@ public class APIRest implements AutoCloseable
             
             //Call the REST ressource
 			StringWriter sw = new StringWriter();
-			ObjectMapper mapper = new ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper();
 			
             HttpResponse response;
             if(this.isSessionOpen(ressource, httpVerb))
@@ -466,10 +466,7 @@ public class APIRest implements AutoCloseable
     */
     public String hello() throws NetimAPIException
     {
-		HashMap<String,Object> params = new HashMap<String, Object>();
-        params.put("IDSession", this._sessionID);
-
-        return call("hello/", HttpVerb.POST, params, String.class);
+        return call("hello/", HttpVerb.GET, String.class);
     }
 
     /**
