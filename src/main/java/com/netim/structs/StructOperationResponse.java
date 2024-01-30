@@ -35,6 +35,8 @@ public class StructOperationResponse implements StructInterface {
     @JsonProperty("DATE")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date date;
+	@JsonProperty("DATA")
+	private String data;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -86,6 +88,16 @@ public class StructOperationResponse implements StructInterface {
     @JsonProperty("DATE")
     public void setDate(Date date) {
         this.date = date;
+    }
+
+	@JsonProperty("DATA")
+    public String getData() {
+        return data;
+    }
+
+    @JsonProperty("DATA")
+    public void setDate(String data) {
+        this.data = data;
     }
 
     @JsonAnyGetter
