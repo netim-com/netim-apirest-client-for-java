@@ -14,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+	"idContact",
     "firstName",
     "lastName",
     "bodyForm",
@@ -44,6 +45,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 public class StructContact implements StructInterface {
 
+	@JsonProperty("idContact ")
+	private String idContact;
     @JsonProperty("firstName")
     private String firstName;
     @JsonProperty("lastName")
@@ -113,7 +116,7 @@ public class StructContact implements StructInterface {
 
 
     public StructContact(String firstName, String lastName, String bodyForm, String bodyName, String address1, String address2, String zipCode, String area, String city, String country, String phone, String fax, String email, String language, int isOwner, String tmName, String tmNumber, String tmType, String tmDate, String companyNumber, String vatNumber, String birthDate, String birthZipCode, String birthCity, String birthCountry, String idNumber, Map<String,Object> additional) {
-        this.firstName = firstName;
+		this.firstName = firstName;
         this.lastName = lastName;
         this.bodyForm = bodyForm;
         this.bodyName = bodyName;
@@ -153,6 +156,14 @@ public class StructContact implements StructInterface {
     }
 
 
+	@JsonProperty("idContact")
+	public String getIdContact() {
+		return this.idContact;
+	}
+	@JsonProperty("idContact")
+	public void setIdContact(String idContact) {
+		this.idContact = idContact;
+	}
     @JsonProperty("firstName")
     public String getFirstName() {
         return this.firstName;
