@@ -26,10 +26,8 @@ public class StructSessionInfo implements StructInterface {
     private Integer timeLogin;
     @JsonProperty("timeLastActivity")
     private Integer timeLastActivity;
-    @JsonProperty("lang")
-    private String lang;
-    @JsonProperty("sync")
-    private Integer sync;
+    @JsonProperty("preferences")
+	private Map<String, Object> preferences = new HashMap<String, Object>();
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -63,24 +61,23 @@ public class StructSessionInfo implements StructInterface {
         this.timeLastActivity = timeLastActivity;
     }
 
-    @JsonProperty("lang")
-    public String getLang() {
-        return lang;
+    @JsonProperty("preferences")
+	public Object getPreferences() {
+        return this.preferences;
     }
 
-    @JsonProperty("lang")
-    public void setLang(String lang) {
-        this.lang = lang;
+    public String getPreference(String key) {
+		if (this.preferences.containsKey(key)) {
+        	return this.preferences.get(key).toString();
+
+		} else {
+			return "";
+		}
     }
 
-    @JsonProperty("sync")
-    public Integer getSync() {
-        return sync;
-    }
-
-    @JsonProperty("sync")
-    public void setSync(Integer sync) {
-        this.sync = sync;
+	@JsonProperty("preferences")
+    public void setPreference(String key, String value) {
+		this.preferences.put(key, (Object) value);
     }
 
     @JsonAnyGetter

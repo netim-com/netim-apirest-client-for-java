@@ -384,6 +384,21 @@ public class APIRest implements AutoCloseable
         return this._lastError;
     }
 
+	public Map<String, String> getPreferences()
+	{
+		return this._preferences;
+	}
+
+	public void setPreference(String key, String value)
+	{
+		if (this._preferences.containsKey(key)) {
+			this._preferences.replace(key, value);
+
+		} else {
+			this._preferences.put(key, value);
+		}
+	}
+
     /** 
     *   API FUNCTIONS
     */
@@ -421,14 +436,13 @@ public class APIRest implements AutoCloseable
      *                                         sync = 0 (for asynchronous) / 1 (for synchronous) 
      * @throws NetimAPIException
      */
-    public void sessionSetPreference(String type, String value) throws NetimAPIException
-    {        
-        HashMap<String, String> params = new HashMap<String,String>();
-        params.put("type", type);
-        params.put("value", value);
-        call("session/", HttpVerb.PATCH, params, Void.class);
-        
-    }
+	public void sessionSetPreference(Map<String, String> preferences) throws NetimAPIException
+	{
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("preferences", preferences);
+
+		call("session/", HttpVerb.PATCH, params, Void.class);
+	}
 
     /**
      * Returns all active sessions linked to the reseller account. 
