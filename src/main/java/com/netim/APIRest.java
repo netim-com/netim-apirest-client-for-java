@@ -645,44 +645,6 @@ public class APIRest implements AutoCloseable
     }
 
     /**
-     * Query informations about the state of an operation
-     *
-     * Example
-        
-        domain = "myDomain.com";
-        res = null;
-        try
-        {
-            res = client.domainAuthID(domain, 0);
-            try = 0;
-            while(try < 10 && res.getStatus=="Pending")
-            {	
-                // The operation is pending, we will wait at most 10sec to see if the operation status change
-                // and check every second if it changes
-                TimeUnit.SECONDS.sleep(1); 
-                try++;
-                res = client.queryOpe()
-            }
-        }
-        catch (NetimAPIexception exception)
-        {
-            //do something when operation had an error
-        }
-        //continue processing
-    
-     * @param idOpe The id of the operation requested
-     * 
-     * @throws NetimAPIException
-     *
-     * @return StructOperationResponse giving information on the status of the operation
-     *
-     * @see queryOpe API http://support.netim.com/en/wiki/QueryOpe
-     */
-    public StructOperationResponse queryOpe(String idOpe) throws NetimAPIException {
-        return call("operation/" + idOpe, HttpVerb.GET, StructOperationResponse.class);
-    }
-
-    /**
      * Cancel a pending operation
      * @warning Depending on the current status of the operation, the cancellation might not be possible
      * 
@@ -696,32 +658,26 @@ public class APIRest implements AutoCloseable
         call("operation/" + idOpe + "/cancel/", HttpVerb.PATCH, Void.class);
     }
 
-    public Map<String,Integer> queryOpeList (String tld) throws NetimAPIException {
-        try {
-            TypeReference<HashMap<String, Integer>> typeRef 
-                = new TypeReference<HashMap<String, Integer>>() {};
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(call("tld/" + tld + "/operations/", HttpVerb.GET), typeRef);
-        }
-        catch (Exception e)
-        {
-            this._lastError = e.getMessage();
-            throw new NetimAPIException(e);
-        }
-    }
-
     /**
      * Returns the list of pending operations processing 
      * 
      * @throws NetimAPIException
      * 
-     * @return StructQueryOpePending[]  the list of pending operations processing 
+     * @return StructOperationResponse[]  the list of pending operations processing 
      * 
-     * @see queryOpePending API https://support.netim.com/en/wiki/QueryOpePending
+     * @see queryOpe API https://support.netim.com/en/wiki/queryOpe
      * 
      */
-    public StructQueryOpePending[] queryOpePending() throws NetimAPIException {
-        return call("operations/pending/", HttpVerb.GET, StructQueryOpePending[].class);
+    public StructOperationResponse[] opeList(HashMap<String, Object> filters) throws NetimAPIException {
+		if(filters.isEmpty()) {
+			return call("operations/", HttpVerb.POST, new HashMap<String, Object>(), StructOperationResponse[].class);
+
+		} else {
+			HashMap<String, Object> params = new HashMap<String, Object>();
+			params.put("filters", filters);
+
+			return call("operations/", HttpVerb.POST, params, StructOperationResponse[].class);
+		}
     }
 
     /**
@@ -734,20 +690,22 @@ public class APIRest implements AutoCloseable
      * 
      * @throws NetimAPIException
      * 
-     * @return StructContactList[] An array of StructContactList
+     * @return contactList[] An array of contactList
      * 
-     * @see queryContactList API https://support.netim.com/en/wiki/QueryContactList
+     * @see contactList API https://support.netim.com/en/wiki/contactList
      * 
      */
-    public StructContactList[] queryContactList(String filter, String field) throws NetimAPIException {
-        if(filter.isEmpty() && field.isEmpty())
-            return call("contacts/", HttpVerb.GET, StructContactList[].class);
-        else
-            return call("contacts/" + field + "/" + filter + "/", HttpVerb.GET, StructContactList[].class);
-    }
+    public StructContactList[] contactList(HashMap<String, Object> filters) throws NetimAPIException {
 
-    public StructContactList[] queryContactList() throws NetimAPIException {
-        return queryContactList("", "");
+		if(filters.isEmpty()) {
+			return call("contacts/", HttpVerb.POST, new HashMap<String, Object>(), StructContactList[].class);
+
+		} else {
+			HashMap<String, Object> params = new HashMap<String, Object>();
+			params.put("filters", filters);
+
+			return call("contacts/", HttpVerb.POST, params, StructContactList[].class);
+		}
     }
 
     /**

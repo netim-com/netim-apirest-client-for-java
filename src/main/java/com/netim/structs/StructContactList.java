@@ -35,7 +35,7 @@ public class StructContactList implements StructInterface {
     @JsonProperty("bodyName")
     private String bodyName;
     @JsonProperty("isOwner")
-    private Integer isOwner;
+    private boolean isOwner;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -90,12 +90,12 @@ public class StructContactList implements StructInterface {
     }
 
     @JsonProperty("isOwner")
-    public Integer getIsOwner() {
+    public boolean getIsOwner() {
         return isOwner;
     }
 
     @JsonProperty("isOwner")
-    public void setIsOwner(Integer isOwner) {
+    public void setIsOwner(boolean isOwner) {
         this.isOwner = isOwner;
     }
 
