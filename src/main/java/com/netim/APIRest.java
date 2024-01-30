@@ -430,11 +430,11 @@ public class APIRest implements AutoCloseable
     /**
      * Updates the settings of the current session. 
      * 
-     * @param type Setting to be modified : lang
-     *                                      sync
-     * @param value New value of the Setting : lang = EN / FR
-     *                                         sync = 0 (for asynchronous) / 1 (for synchronous) 
+     * @param preferences Session preferences
+	 * 
      * @throws NetimAPIException
+	 *
+     * @see sessionSetPreference API https://support.netim.com/en/docs/api-rest-3-0/sessions-management/set-session-preferences
      */
 	public void sessionSetPreference(Map<String, String> preferences) throws NetimAPIException
 	{
@@ -644,6 +644,44 @@ public class APIRest implements AutoCloseable
         return call("contact/" + idContact, HttpVerb.DELETE, StructOperationResponse.class);
     }
 
+	/**
+     * Query informations about the state of an operation
+     *
+     * Example
+        
+        domain = "myDomain.com";
+        res = null;
+        try
+        {
+            res = client.domainAuthID(domain, 0);
+            try = 0;
+            while(try < 10 && res.getStatus=="Pending")
+            {	
+                // The operation is pending, we will wait at most 10sec to see if the operation status change
+                // and check every second if it changes
+                TimeUnit.SECONDS.sleep(1); 
+                try++;
+                res = client.queryOpe()
+            }
+        }
+        catch (NetimAPIexception exception)
+        {
+            //do something when operation had an error
+        }
+        //continue processing
+    
+     * @param idOpe The id of the operation requested
+     * 
+     * @throws NetimAPIException
+     *
+     * @return StructOperationResponse giving information on the status of the operation
+     *
+     * @see queryOpe API https://support.netim.com/en/docs/api-rest-3-0/operations/get-operation-information
+     */
+    public StructOperationResponse opeInfo(String idOpe) throws NetimAPIException {
+        return call("operation/" + idOpe, HttpVerb.GET, StructOperationResponse.class);
+    }
+
     /**
      * Cancel a pending operation
      * @warning Depending on the current status of the operation, the cancellation might not be possible
@@ -659,13 +697,15 @@ public class APIRest implements AutoCloseable
     }
 
     /**
-     * Returns the list of pending operations processing 
+     * Returns a list of operations corresponding to the filters
+     *
+	 * @param filters List function filter
      * 
      * @throws NetimAPIException
      * 
-     * @return StructOperationResponse[]  the list of pending operations processing 
+     * @return StructOperationResponse[]  the list of operations 
      * 
-     * @see queryOpe API https://support.netim.com/en/wiki/queryOpe
+     * @see opeList API https://support.netim.com/en/docs/api-rest-3-0/operations/get-operation-list
      * 
      */
     public StructOperationResponse[] opeList(HashMap<String, Object> filters) throws NetimAPIException {
@@ -681,18 +721,15 @@ public class APIRest implements AutoCloseable
     }
 
     /**
-     * Returns all contacts linked to the reseller account. 
-     * 
-     * The  symbol '*' equals  symbol '%' in SQL for the filter
-     * 
-     * @param filter The filter applies on the "field" 
-     * @param field idContact / firstName / lastName / bodyForm / isOwner 
+	 * Returns a list of contacts corresponding to the filters. 
+	 *
+	 * @param filters List function filter
      * 
      * @throws NetimAPIException
      * 
-     * @return contactList[] An array of contactList
+     * @return contactList[] An array of contact
      * 
-     * @see contactList API https://support.netim.com/en/wiki/contactList
+     * @see contactList API https://support.netim.com/en/docs/api-rest-3-0/domain-names/domain-contacts/get-contact-list
      * 
      */
     public StructContactList[] contactList(HashMap<String, Object> filters) throws NetimAPIException {
@@ -767,6 +804,8 @@ public class APIRest implements AutoCloseable
     }
 
     /**
+     * Returns a list of contacts corresponding to the filters. 
+     *
      * @param filters List function filter
      * 
      * @throws NetimAPIException
@@ -777,20 +816,27 @@ public class APIRest implements AutoCloseable
      */
     public StructHostList[] hostList(HashMap<String, Object> filters) throws NetimAPIException
     {
-		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("filters", filters);
+		if(filters.isEmpty()) {
+			return call("hosts/", HttpVerb.POST, new HashMap<String, Object>(), StructHostList[].class);
 
-        return call("hosts/", HttpVerb.POST, params, StructHostList[].class);
+		} else {
+			HashMap<String, Object> params = new HashMap<String, Object>();
+			params.put("filters", filters);
+
+			return call("hosts/", HttpVerb.POST, params, StructHostList[].class);
+		}
     }
 
 	/**
+	 * Return the information of the requested host.
+	 * 
      * @param name	host name 
      * 
      * @throws NetimAPIException
      *
      * @return array An array of StructHostList
      *
-     * @see queryHostList API http://support.netim.com/en/wiki/QueryHostList
+     * @see hostInfo API https://support.netim.com/en/docs/api-rest-3-0/domain-names/domain-hosts/get-host-information
      */
     public StructHostInfo hostInfo(String name) throws NetimAPIException {
         return call("host/" + name, HttpVerb.GET, StructHostInfo.class);
@@ -1758,10 +1804,15 @@ public class APIRest implements AutoCloseable
      */
     public StructDomainList[] domainList(HashMap<String, Object> filters) throws NetimAPIException
     {
-		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("filters", filters);
+		if(filters.isEmpty()) {
+			return this.call("/domains/", HttpVerb.POST, new HashMap<String, Object>(), StructDomainList[].class);
 
-        return this.call("/domains/", HttpVerb.POST, params, StructDomainList[].class);
+		} else {
+			HashMap<String, Object> params = new HashMap<String, Object>();
+			params.put("filters", filters);
+
+       		return this.call("/domains/", HttpVerb.POST, params, StructDomainList[].class);
+		}
     }
 
     /**
