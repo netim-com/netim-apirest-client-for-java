@@ -809,16 +809,20 @@ public class APIRest implements AutoCloseable
     }
 
     /**
-     * @param filter The filter applies onto the host name 
+     * @param filters List function filter
      * 
      * @throws NetimAPIException
      *
      * @return array An array of StructHostList
      *
-     * @see queryHostList API http://support.netim.com/en/wiki/QueryHostList
+     * @see hostList API http://support.netim.com/en/wiki/hstList
      */
-    public StructHostList[] queryHostList(String filter) throws NetimAPIException {
-        return call("hosts/" + filter, HttpVerb.GET, StructHostList[].class);
+    public StructHostList[] hostList(HashMap<String, Object> filters) throws NetimAPIException
+    {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("filters", filters);
+
+        return call("hosts/", HttpVerb.POST, params, StructHostList[].class);
     }
 
 	/**
