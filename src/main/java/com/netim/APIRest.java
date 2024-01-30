@@ -821,6 +821,19 @@ public class APIRest implements AutoCloseable
         return call("hosts/" + filter, HttpVerb.GET, StructHostList[].class);
     }
 
+	/**
+     * @param name	host name 
+     * 
+     * @throws NetimAPIException
+     *
+     * @return array An array of StructHostList
+     *
+     * @see queryHostList API http://support.netim.com/en/wiki/QueryHostList
+     */
+    public StructHostInfo hostInfo(String name) throws NetimAPIException {
+        return call("host/" + name, HttpVerb.GET, StructHostInfo.class);
+    }
+
     /**
      * Checks if domain names are available for registration   
      *
