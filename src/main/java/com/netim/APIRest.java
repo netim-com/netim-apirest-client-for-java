@@ -1772,18 +1772,21 @@ public class APIRest implements AutoCloseable
     /**
      * Returns all domains linked to the reseller account.
      * 
-     * @param filter Domain name
+     * @param filters List function filters
      * 
      * @throws NetimAPIException
      * 
      * @return array The filter applies onto the domain name
      *
-     * @see queryDomainList API https://support.netim.com/en/wiki/QueryDomainList
+     * @see domainList API https://support.netim.com/en/wiki/domainList
      *
      */
-    public StructDomainList[] queryDomainList(String filter) throws NetimAPIException
+    public StructDomainList[] domainList(HashMap<String, Object> filters) throws NetimAPIException
     {
-        return this.call("/domains/" + filter, HttpVerb.GET, StructDomainList[].class);
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("filters", filters);
+
+        return this.call("/domains/", HttpVerb.POST, params, StructDomainList[].class);
     }
 
     /**
