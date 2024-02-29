@@ -1,4 +1,4 @@
-# APIRest-client-java
+# APIRest-client-java 3.0
 
 ## Description
 This client is designed to communicate with the netim REST API.
