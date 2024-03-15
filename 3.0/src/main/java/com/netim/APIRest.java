@@ -1692,35 +1692,6 @@ public class APIRest implements AutoCloseable
         return this.call("/domain/" + domain + "/dnssec/", HttpVerb.PATCH, params, StructOperationResponse.class);
     }
 
-    /**
-     * Returns whois informations on given domain
-     * 
-     * Example:
-        
-        String res = null;
-        try
-        {
-            res = client.domainWhois("myDomain.com");
-        }
-        catch (NetimAPIexception exception)
-        {
-            //do something about the error
-        }
-
-        //continue processing
-        
-     * @param domain the domain's name
-     *
-     * @throws NetimAPIException
-     *
-     * @return information about the domain
-     */
-    public String domainWhois(String domain) throws NetimAPIException
-    {
-        domain = domain.toLowerCase();
-        return this.call("/domain/" + domain + "/whois/", HttpVerb.GET, String.class);
-    }
-    
 
     /**
      * Returns the list of all prices for each tld 
