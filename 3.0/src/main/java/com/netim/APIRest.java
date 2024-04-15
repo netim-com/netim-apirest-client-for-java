@@ -882,7 +882,7 @@ public class APIRest implements AutoCloseable
         StructOperationResponse res = null;
         try
         {
-            res = client.domainCreate(domain, idOwner, idAdmin, idTech, idBilling, ns1, ns2, ns3, ns4, ns5, duration);
+            res = client.domainCreate(domain, idOwner, idAdmin, idTech, idBilling, ns1, ns2, ns3, ns4, ns5, duration, options);
         }
         catch (NetimAPIexception exception)
         {
@@ -910,10 +910,10 @@ public class APIRest implements AutoCloseable
         *
         * @see domainCreate API http://support.netim.com/en/wiki/DomainCreate 
         */
-    public StructOperationResponse domainCreate(String domain, String idOwner, String idAdmin, String idTech, String idBilling, String ns1, String ns2, String ns3, String ns4, String ns5, int duration, Integer templateDNS) throws NetimAPIException {
+    public StructOperationResponse domainCreate(String domain, String idOwner, String idAdmin, String idTech, String idBilling, String ns1, String ns2, String ns3, String ns4, String ns5, int duration, HashMap<String, Object> options) throws NetimAPIException {
         domain = domain.toLowerCase();
 
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, Object> params = new HashMap<String, Object>();
 
         params.put("idOwner", idOwner);
         params.put("idAdmin", idAdmin);
@@ -928,8 +928,8 @@ public class APIRest implements AutoCloseable
 
         params.put("duration", String.valueOf(duration));
 
-        if (templateDNS != null)
-            params.put("templateDNS", String.valueOf(templateDNS));
+        if (options != null)
+            params.put("options", options);
 
         return this.call("domain/" + domain + "/", HttpVerb.POST, params, StructOperationResponse.class);
     }
@@ -1099,11 +1099,11 @@ public class APIRest implements AutoCloseable
         *
         * @see domainTransferIn API http://support.netim.com/en/wiki/DomainTransferIn
         */
-    public StructOperationResponse domainTransferIn(String domain, String authID, String idOwner, String idAdmin, String idTech, String idBilling, String ns1, String ns2, String ns3, String ns4, String ns5) throws NetimAPIException
+    public StructOperationResponse domainTransferIn(String domain, String authID, String idOwner, String idAdmin, String idTech, String idBilling, String ns1, String ns2, String ns3, String ns4, String ns5, HashMap<String, Object> options) throws NetimAPIException
     {
         domain = domain.toLowerCase();
 
-        HashMap<String, String> params = new HashMap<String, String>();
+		HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("authID", authID);
         
         params.put("idOwner", idOwner);
@@ -1117,8 +1117,17 @@ public class APIRest implements AutoCloseable
         params.put("ns4", ns4);
         params.put("ns5", ns5);
 
+		if (options != null)
+			params.put("options", options);
+
         return this.call("/domain/" + domain + "/transfer/", HttpVerb.POST, params, StructOperationResponse.class);
     }
+
+	public StructOperationResponse domainTransferIn(String domain, String authID, String idOwner, String idAdmin, String idTech, String idBilling, String ns1, String ns2, String ns3, String ns4, String ns5) throws NetimAPIException
+	{
+		return this.domainTransferIn(domain, authID, idOwner, idAdmin, idTech, idBilling, ns1, ns2, ns3, ns4, ns5, null);
+	}
+	
 
     /**
      * Requests the transfer (with change of domain holder) of a domain name to Netim 
@@ -1166,11 +1175,11 @@ public class APIRest implements AutoCloseable
         *
         * @see domainTransferTrade API http://support.netim.com/en/wiki/domainTransferTrade
         */
-    public StructOperationResponse domainTransferTrade(String domain, String authID, String idOwner, String idAdmin, String idTech, String idBilling, String ns1, String ns2, String ns3, String ns4, String ns5) throws NetimAPIException
+    public StructOperationResponse domainTransferTrade(String domain, String authID, String idOwner, String idAdmin, String idTech, String idBilling, String ns1, String ns2, String ns3, String ns4, String ns5, HashMap<String, Object> options) throws NetimAPIException
     {
         domain = domain.toLowerCase();
 
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("authID", authID);
         
         params.put("idOwner", idOwner);
@@ -1184,8 +1193,16 @@ public class APIRest implements AutoCloseable
         params.put("ns4", ns4);
         params.put("ns5", ns5);
 
+		if (options != null)
+			params.put("options", options);
+
         return this.call("/domain/" + domain + "/transfer-trade/", HttpVerb.POST, params, StructOperationResponse.class);
     }
+
+	public StructOperationResponse domainTransferTrade(String domain, String authID, String idOwner, String idAdmin, String idTech, String idBilling, String ns1, String ns2, String ns3, String ns4, String ns5) throws NetimAPIException
+	{
+		return this.domainTransferTrade(domain, authID, idOwner, idAdmin, idTech, idBilling, ns1, ns2, ns3, ns4, ns5, null);
+	}
 
     /**
      * Requests the internal transfer of a domain name from one Netim account to another. 
@@ -1388,15 +1405,23 @@ public class APIRest implements AutoCloseable
      * @see domainTransferOwner API http://support.netim.com/en/wiki/DomainTransferOwner
      * @see function createContact
      */
-    public StructOperationResponse domainTransferOwner(String domain, String idOwner) throws NetimAPIException
+    public StructOperationResponse domainTransferOwner(String domain, String idOwner, HashMap<String, Object> options) throws NetimAPIException
     {
         domain = domain.toLowerCase();
 
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("idOwner", idOwner);
+
+		if (options != null)
+			params.put("options", options);
 
         return this.call("/domain/" + domain + "/transfer-owner/", HttpVerb.PUT, params, StructOperationResponse.class);
     }
+
+	public StructOperationResponse domainTransferOwner(String domain, String idOwner) throws NetimAPIException
+	{
+		return this.domainTransferOwner(domain, idOwner, null);
+	}
 
     /**
      * Replaces the contacts of the domain (administrative, technical, billing) 
@@ -1430,17 +1455,25 @@ public class APIRest implements AutoCloseable
      * @see domainChangeContact API http://support.netim.com/en/wiki/DomainChangeContact
      * @see function createContact
     */
-    public StructOperationResponse domainChangeContact(String domain, String idAdmin, String idTech, String idBilling) throws NetimAPIException
+    public StructOperationResponse domainChangeContact(String domain, String idAdmin, String idTech, String idBilling, HashMap<String, Object> options) throws NetimAPIException
     {
         domain = domain.toLowerCase();
 
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("idAdmin", idAdmin);
         params.put("idTech", idTech);
         params.put("idBilling", idBilling);
 
+		if (options != null)
+			params.put("options", options);
+
         return this.call("/domain/" + domain + "/contacts/", HttpVerb.PUT, params, StructOperationResponse.class);
     }
+
+	public StructOperationResponse domainChangeContact(String domain, String idAdmin, String idTech, String idBilling) throws NetimAPIException
+	{
+		return this.domainChangeContact(domain, idAdmin, idTech, idBilling, null);
+	}
 
     /**
      * Replaces the DNS servers of the domain (redelegation) 
