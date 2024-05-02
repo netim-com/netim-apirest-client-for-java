@@ -873,16 +873,15 @@ public class APIRest implements AutoCloseable
         String idAdmin = "BJ007";
         String idTech = "BJ007";
         String idBilling = "BJ007";
-        String ns1 = "ns1.netim.com";
-        String ns2 = "ns2.netim.com";
-        String ns3 = "ns3.netim.com"; 
-        String ns4 = "ns4.netim.com";
-        String ns5 = "ns5.netim.com";
+		HashMap<Integer, Object> nameservers = new HashMap<>() {{
+			put(1, Map.of("name", "ns1.netim.net"));
+			put(2, Map.of("name", "ns2.netim.net"));
+		}};
         int duration = 1;
         StructOperationResponse res = null;
         try
         {
-            res = client.domainCreate(domain, idOwner, idAdmin, idTech, idBilling, ns1, ns2, ns3, ns4, ns5, duration, options);
+            res = client.domainCreate(domain, idOwner, idAdmin, idTech, idBilling, nameservers, duration, options);
         }
         catch (NetimAPIexception exception)
         {
@@ -896,11 +895,7 @@ public class APIRest implements AutoCloseable
         * @param idTech the id of the tech for the new domain
         * @param idBilling the id of the billing for the new domain
         *                          To get an ID, you can call contactCreate() with the appropriate information
-        * @param ns1 the name of the first dns
-        * @param ns2 the name of the second dns
-        * @param ns3 the name of the third dns
-        * @param ns4 the name of the fourth dns
-        * @param ns5 the name of the fifth dns
+        * @param nameservers the nameservers for the domain
         * @param duration how long the domain will be created
         * @param templateDNS OPTIONAL number of the template DNS created on netim.com/direct
         *
@@ -910,7 +905,7 @@ public class APIRest implements AutoCloseable
         *
         * @see domainCreate API http://support.netim.com/en/wiki/DomainCreate 
         */
-    public StructOperationResponse domainCreate(String domain, String idOwner, String idAdmin, String idTech, String idBilling, String ns1, String ns2, String ns3, String ns4, String ns5, int duration, HashMap<String, Object> options) throws NetimAPIException {
+    public StructOperationResponse domainCreate(String domain, String idOwner, String idAdmin, String idTech, String idBilling, HashMap<Integer, Object> nameservers, int duration, HashMap<String, Object> options) throws NetimAPIException {
         domain = domain.toLowerCase();
 
         HashMap<String, Object> params = new HashMap<String, Object>();
@@ -919,12 +914,7 @@ public class APIRest implements AutoCloseable
         params.put("idAdmin", idAdmin);
         params.put("idTech", idTech);
         params.put("idBilling", idBilling);
-
-        params.put("ns1", ns1);
-        params.put("ns2", ns2);
-        params.put("ns3", ns3);
-        params.put("ns4", ns4);
-        params.put("ns5", ns5);
+        params.put("nameservers", nameservers);
 
         params.put("duration", String.valueOf(duration));
 
@@ -934,8 +924,8 @@ public class APIRest implements AutoCloseable
         return this.call("domain/" + domain + "/", HttpVerb.POST, params, StructOperationResponse.class);
     }
 
-    public StructOperationResponse domainCreate(String domain, String idOwner, String idAdmin, String idTech, String idBilling, String ns1, String ns2, String ns3, String ns4, String ns5, int duration) throws NetimAPIException {
-        return this.domainCreate(domain, idOwner, idAdmin, idTech, idBilling, ns1, ns2, ns3, ns4, ns5, duration, null);
+    public StructOperationResponse domainCreate(String domain, String idOwner, String idAdmin, String idTech, String idBilling, HashMap<Integer, Object> nameservers, int duration) throws NetimAPIException {
+        return this.domainCreate(domain, idOwner, idAdmin, idTech, idBilling, nameservers, duration, null);
     }
 
     public StructDomainInfo domainInfo(String domain) throws NetimAPIException {
@@ -952,17 +942,16 @@ public class APIRest implements AutoCloseable
         String idAdmin = "BJ007";
         String idTech = "BJ007";
         String idBilling = "BJ007";
-        String ns1 = "ns1.netim.com";
-        String ns2 = "ns2.netim.com";
-        String ns3 = "ns3.netim.com";
-        String ns4 = "ns4.netim.com";
-        String ns5 = "ns5.netim.com";
+		HashMap<Integer, Object> nameservers = new HashMap<>() {{
+			put(1, Map.of("name", "ns1.netim.net"));
+			put(2, Map.of("name", "ns2.netim.net"));
+		}};
         int duration = 1;
         String phase = "GA";
         StructOperationResponse res = null;
         try
         {
-            res = client.domainCreateLP(domain, idOwner, idAdmin, idTech, idBilling, ns1, ns2, ns3, ns4, ns5, duration, phase);
+            res = client.domainCreateLP(domain, idOwner, idAdmin, idTech, idBilling, nameservers, duration, phase);
         }
         catch (NetimAPIexception exception)
         {
@@ -976,11 +965,7 @@ public class APIRest implements AutoCloseable
         * @param idTech the id of the tech for the new domain
         * @param idBilling the id of the billing for the new domain
         *                          To get an ID, you can call contactCreate() with the appropriate information
-        * @param ns1 the name of the first dns
-        * @param ns2 the name of the second dns
-        * @param ns3 the name of the third dns
-        * @param ns4 the name of the fourth dns
-        * @param ns5 the name of the fifth dns
+		* @param nameservers the nameservers for the domain
         * @param duration how long the domain will be created
         * @param phase the id of the launch phase
         *
@@ -990,21 +975,16 @@ public class APIRest implements AutoCloseable
         *
         * @see domainCreateLP API http://support.netim.com/en/wiki/DomainCreateLP 
         */
-    public StructOperationResponse domainCreateLP(String domain, String idOwner, String idAdmin, String idTech, String idBilling, String ns1, String ns2, String ns3, String ns4, String ns5, int duration, String phase) throws NetimAPIException
+    public StructOperationResponse domainCreateLP(String domain, String idOwner, String idAdmin, String idTech, String idBilling, HashMap<Integer, Object> nameservers, int duration, String phase) throws NetimAPIException
     {
         domain = domain.toLowerCase();
 
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("idOwner", idOwner);
         params.put("idAdmin", idAdmin);
         params.put("idTech", idTech);
         params.put("idBilling", idBilling);
-
-        params.put("ns1", ns1);
-        params.put("ns2", ns2);
-        params.put("ns3", ns3);
-        params.put("ns4", ns4);
-        params.put("ns5", ns5);
+		params.put("nameservers", nameservers);
 
         params.put("duration", String.valueOf(duration));
 
@@ -1064,16 +1044,15 @@ public class APIRest implements AutoCloseable
         String idAdmin = "BJ007";
         String idTech = "BJ007";
         String idBilling = "BJ007";
-        String ns1 = "ns1.netim.com";
-        String ns2 = "ns2.netim.com";
-        String ns3 = "ns3.netim.com"; 
-        String ns4 = "ns4.netim.com";
-        String ns5 = "ns5.netim.com";
+		HashMap<Integer, Object> nameservers = new HashMap<>() {{
+			put(1, Map.of("name", "ns1.netim.net"));
+			put(2, Map.of("name", "ns2.netim.net"));
+		}};
 
         StructOperationResponse res = null;
         try
         {
-            res = client.domainTransferIn(domain, authID, idOwner, idAdmin, idTech, idBilling, ns1, ns2, ns3, ns4, ns5);
+            res = client.domainTransferIn(domain, authID, idOwner, idAdmin, idTech, idBilling, nameservers);
         }
         catch (NetimAPIexception exception)
         {
@@ -1087,11 +1066,7 @@ public class APIRest implements AutoCloseable
         * @param idAdmin a valid idAdmin
         * @param idTech a valid idTech
         * @param idBilling a valid idBilling
-        * @param ns1 the name of the first dns
-        * @param ns2 the name of the second dns
-        * @param ns3 the name of the third dns
-        * @param ns4 the name of the fourth dns
-        * @param ns5 the name of the fifth dns
+		* @param nameservers the nameservers for the domain
         *
         * @throws NetimAPIException
         *
@@ -1099,7 +1074,7 @@ public class APIRest implements AutoCloseable
         *
         * @see domainTransferIn API http://support.netim.com/en/wiki/DomainTransferIn
         */
-    public StructOperationResponse domainTransferIn(String domain, String authID, String idOwner, String idAdmin, String idTech, String idBilling, String ns1, String ns2, String ns3, String ns4, String ns5, HashMap<String, Object> options) throws NetimAPIException
+    public StructOperationResponse domainTransferIn(String domain, String authID, String idOwner, String idAdmin, String idTech, String idBilling, HashMap<Integer, Object> nameservers, HashMap<String, Object> options) throws NetimAPIException
     {
         domain = domain.toLowerCase();
 
@@ -1110,12 +1085,7 @@ public class APIRest implements AutoCloseable
         params.put("idAdmin", idAdmin);
         params.put("idTech", idTech);
         params.put("idBilling", idBilling);
-
-        params.put("ns1", ns1);
-        params.put("ns2", ns2);
-        params.put("ns3", ns3);
-        params.put("ns4", ns4);
-        params.put("ns5", ns5);
+		params.put("nameservers", nameservers);
 
 		if (options != null)
 			params.put("options", options);
@@ -1123,9 +1093,9 @@ public class APIRest implements AutoCloseable
         return this.call("/domain/" + domain + "/transfer/", HttpVerb.POST, params, StructOperationResponse.class);
     }
 
-	public StructOperationResponse domainTransferIn(String domain, String authID, String idOwner, String idAdmin, String idTech, String idBilling, String ns1, String ns2, String ns3, String ns4, String ns5) throws NetimAPIException
+	public StructOperationResponse domainTransferIn(String domain, String authID, String idOwner, String idAdmin, String idTech, String idBilling, HashMap<Integer, Object> nameservers) throws NetimAPIException
 	{
-		return this.domainTransferIn(domain, authID, idOwner, idAdmin, idTech, idBilling, ns1, ns2, ns3, ns4, ns5, null);
+		return this.domainTransferIn(domain, authID, idOwner, idAdmin, idTech, idBilling, nameservers, null);
 	}
 	
 
@@ -1140,16 +1110,15 @@ public class APIRest implements AutoCloseable
         String idAdmin = "BJ007";
         String idTech = "BJ007";
         String idBilling = "BJ007";
-        String ns1 = "ns1.netim.com";
-        String ns2 = "ns2.netim.com";
-        String ns3 = "ns3.netim.com"; 
-        String ns4 = "ns4.netim.com";
-        String ns5 = "ns5.netim.com";
+		HashMap<Integer, Object> nameservers = new HashMap<>() {{
+			put(1, Map.of("name", "ns1.netim.net"));
+			put(2, Map.of("name", "ns2.netim.net"));
+		}};
 
         StructOperationResponse res = null;
         try
         {
-            res = client.domainTransferTrade(domain, authID, idOwner, idAdmin, idTech, idBilling, ns1, ns2, ns3, ns4, ns5);
+            res = client.domainTransferTrade(domain, authID, idOwner, idAdmin, idTech, idBilling, nameservers);
         }
         catch (NetimAPIexception exception)
         {
@@ -1163,11 +1132,7 @@ public class APIRest implements AutoCloseable
         * @param idAdmin a valid idAdmin
         * @param idTech a valid idTech
         * @param idBilling a valid idBilling
-        * @param ns1 the name of the first dns
-        * @param ns2 the name of the second dns
-        * @param ns3 the name of the third dns
-        * @param ns4 the name of the fourth dns
-        * @param ns5 the name of the fifth dns
+		* @param nameservers the nameservers for the domain
         *
         * @throws NetimAPIException
         *
@@ -1175,7 +1140,7 @@ public class APIRest implements AutoCloseable
         *
         * @see domainTransferTrade API http://support.netim.com/en/wiki/domainTransferTrade
         */
-    public StructOperationResponse domainTransferTrade(String domain, String authID, String idOwner, String idAdmin, String idTech, String idBilling, String ns1, String ns2, String ns3, String ns4, String ns5, HashMap<String, Object> options) throws NetimAPIException
+    public StructOperationResponse domainTransferTrade(String domain, String authID, String idOwner, String idAdmin, String idTech, String idBilling, HashMap<Integer, Object> nameservers, HashMap<String, Object> options) throws NetimAPIException
     {
         domain = domain.toLowerCase();
 
@@ -1186,12 +1151,7 @@ public class APIRest implements AutoCloseable
         params.put("idAdmin", idAdmin);
         params.put("idTech", idTech);
         params.put("idBilling", idBilling);
-
-        params.put("ns1", ns1);
-        params.put("ns2", ns2);
-        params.put("ns3", ns3);
-        params.put("ns4", ns4);
-        params.put("ns5", ns5);
+		params.put("nameservers", nameservers);
 
 		if (options != null)
 			params.put("options", options);
@@ -1199,9 +1159,9 @@ public class APIRest implements AutoCloseable
         return this.call("/domain/" + domain + "/transfer-trade/", HttpVerb.POST, params, StructOperationResponse.class);
     }
 
-	public StructOperationResponse domainTransferTrade(String domain, String authID, String idOwner, String idAdmin, String idTech, String idBilling, String ns1, String ns2, String ns3, String ns4, String ns5) throws NetimAPIException
+	public StructOperationResponse domainTransferTrade(String domain, String authID, String idOwner, String idAdmin, String idTech, String idBilling, HashMap<Integer, Object> nameservers) throws NetimAPIException
 	{
-		return this.domainTransferTrade(domain, authID, idOwner, idAdmin, idTech, idBilling, ns1, ns2, ns3, ns4, ns5, null);
+		return this.domainTransferTrade(domain, authID, idOwner, idAdmin, idTech, idBilling, nameservers, null);
 	}
 
     /**
@@ -1214,16 +1174,15 @@ public class APIRest implements AutoCloseable
         String idAdmin = "BJ007";
         String idTech = "BJ007";
         String idBilling = "BJ007";
-        String ns1 = "ns1.netim.com";
-        String ns2 = "ns2.netim.com";
-        String ns3 = "ns3.netim.com"; 
-        String ns4 = "ns4.netim.com";
-        String ns5 = "ns5.netim.com";
+		HashMap<Integer, Object> nameservers = new HashMap<>() {{
+			put(1, Map.of("name", "ns1.netim.net"));
+			put(2, Map.of("name", "ns2.netim.net"));
+		}};
 
         StructOperationResponse res = null;
         try
         {
-            res = client.domainTransferTrade(domain, authID, idAdmin, idTech, idBilling, ns1, ns2, ns3, ns4, ns5);
+            res = client.domainTransferTrade(domain, authID, idAdmin, idTech, idBilling, nameservers);
         }
         catch (NetimAPIexception exception)
         {
@@ -1236,11 +1195,7 @@ public class APIRest implements AutoCloseable
      * @param idAdmin a valid idAdmin
      * @param idTech a valid idTech
      * @param idBilling a valid idBilling
-     * @param ns1 the name of the first dns
-     * @param ns2 the name of the second dns
-     * @param ns3 the name of the third dns
-     * @param ns4 the name of the fourth dns
-     * @param ns5 the name of the fifth dns
+	 * @param nameservers the nameservers for the domain
      *
      * @throws NetimAPIException
      *
@@ -1248,22 +1203,17 @@ public class APIRest implements AutoCloseable
      *
      * @see domainInternalTransfer API http://support.netim.com/en/wiki/domainInternalTransfer
     */
-    public StructOperationResponse domainInternalTransfer(String domain, String authID, String idAdmin, String idTech, String idBilling, String ns1, String ns2, String ns3, String ns4, String ns5) throws NetimAPIException
+    public StructOperationResponse domainInternalTransfer(String domain, String authID, String idAdmin, String idTech, String idBilling, HashMap<Integer, Object> nameservers) throws NetimAPIException
     {
         domain = domain.toLowerCase();
 
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("authID", authID);
         
         params.put("idAdmin", idAdmin);
         params.put("idTech", idTech);
         params.put("idBilling", idBilling);
-
-        params.put("ns1", ns1);
-        params.put("ns2", ns2);
-        params.put("ns3", ns3);
-        params.put("ns4", ns4);
-        params.put("ns5", ns5);
+		params.put("nameservers", nameservers);
 
         return this.call("/domain/" + domain + "/internal-transfer/", HttpVerb.PATCH, params, StructOperationResponse.class);
     }
@@ -1481,16 +1431,15 @@ public class APIRest implements AutoCloseable
      * Example
     <pre>{@code
         String domain = "myDomain.com";
-        String ns1 = "ns1.netim.com";
-        String ns2 = "ns2.netim.com";
-        String ns3 = "ns3.netim.com";
-        String ns4 = "ns4.netim.com";
-        String ns5 = "ns5.netim.com";
+		HashMap<Integer, Object> nameservers = new HashMap<>() {{
+			put(1, Map.of("name", "ns1.netim.net"));
+			put(2, Map.of("name", "ns2.netim.net"));
+		}};
 
         StructOperationResponse res = null;
         try
         {
-            res = client.domainChangeDNS(domain, ns1, ns2, ns3, ns4, ns5);
+            res = client.domainChangeDNS(domain, nameservers);
         }
         catch (NetimAPIexception exception)
         {
@@ -1499,11 +1448,7 @@ public class APIRest implements AutoCloseable
         //continue processing}</pre>
     
      * @param domain name of the domain
-     * @param ns1 the name of the first dns
-     * @param ns2 the name of the second dns
-     * @param ns3 the name of the third dns
-     * @param ns4 the name of the fourth dns
-     * @param ns5 the name of the fifth dns
+     * @param nameservers list of nameservers to be set
      *
      * @throws NetimAPIException
      *
@@ -1511,33 +1456,14 @@ public class APIRest implements AutoCloseable
      *
      * @see domainChangeDNS API http://support.netim.com/en/wiki/DomainChangeDNS
     */
-    public StructOperationResponse domainChangeDNS(String domain, String ns1, String ns2, String ns3, String ns4, String ns5) throws NetimAPIException
+    public StructOperationResponse domainChangeDNS(String domain, HashMap<Integer, Object> nameservers) throws NetimAPIException
     {
         domain = domain.toLowerCase();
 
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("ns1", ns1);
-        params.put("ns2", ns2);
-        params.put("ns3", ns3);
-        params.put("ns4", ns4);
-        params.put("ns5", ns5);
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("nameservers", nameservers);
 
         return this.call("/domain/" + domain + "/dns/", HttpVerb.PUT, params, StructOperationResponse.class);
-    }
-
-    public StructOperationResponse domainChangeDNS(String domain, String ns1, String ns2) throws NetimAPIException
-    {
-        return this.domainChangeDNS(domain, ns1, ns2, "", "", "");
-    }
-
-    public StructOperationResponse domainChangeDNS(String domain, String ns1, String ns2, String ns3) throws NetimAPIException
-    {
-        return this.domainChangeDNS(domain, ns1, ns2, ns3, "", "");
-    }
-
-    public StructOperationResponse domainChangeDNS(String domain, String ns1, String ns2, String ns3, String ns4) throws NetimAPIException
-    {
-        return this.domainChangeDNS(domain, ns1, ns2, ns3, ns4, "");
     }
 
     /**
