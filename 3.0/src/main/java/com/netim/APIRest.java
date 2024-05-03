@@ -1749,7 +1749,7 @@ public class APIRest implements AutoCloseable
      * Resets all DNS settings from a template 
      * 
      * @param domain Domain name
-     * @param numTemplate Template number
+     * @param templateDNS Template number
      * 
      * @throws NetimAPIException
      * 
@@ -1758,11 +1758,11 @@ public class APIRest implements AutoCloseable
      * @see domainZoneInit API https://support.netim.com/en/wiki/DomainZoneInit
      * 
      */
-    public StructOperationResponse domainZoneInit(String domain, int numTemplate) throws NetimAPIException
+    public StructOperationResponse domainZoneInit(String domain, int templateDNS) throws NetimAPIException
     {
         domain = domain.toLowerCase();
         var params = new HashMap<String, Object>();
-        params.put("numTemplate", numTemplate);
+        params.put("templateDNS", templateDNS);
 
         return this.call("/domain/" + domain + "/zone/init/", HttpVerb.PATCH, params, StructOperationResponse.class);
     }
@@ -2956,18 +2956,18 @@ public class APIRest implements AutoCloseable
      * Resets all DNS settings from a template 
      * 
      * @param domain
-     * @param profil
+     * @param templateDNS
      * 
      * @throws NetimAPIException
      * 
      * @return StructOperationResponse giving information on the status of the operation
      */
-    public StructOperationResponse webHostingZoneInit(String fqdn, int profil) throws NetimAPIException
+    public StructOperationResponse webHostingZoneInit(String fqdn, int templateDNS) throws NetimAPIException
     {
         fqdn = fqdn.toLowerCase();
 
         var params = new HashMap<String, Object>();
-        params.put("profil", profil);
+        params.put("templateDNS", templateDNS);
 
         return this.call("/webhosting/" + fqdn + "/zone/init/", HttpVerb.PATCH, params, StructOperationResponse.class);
     }
