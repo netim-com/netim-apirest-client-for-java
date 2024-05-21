@@ -30,14 +30,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
     "HasLocalContactService",
     "HasZonecheck",
     "HasDnsSec",
-    "FeeCurrency",
-    "Fee4Registration",
-    "Fee4Renewal",
-    "Fee4Transfer",
-    "Fee4Trade",
-    "Fee4Restore",
-    "Fee4TrusteeService",
-    "Fee4LocalContactService",
     "Informations"
 })
 
@@ -79,22 +71,6 @@ public class StructDomainTldInfo {
     private Integer hasZonecheck;
     @JsonProperty("HasDnsSec")
     private Integer hasDnsSec;
-    @JsonProperty("FeeCurrency")
-    private String feeCurrency;
-    @JsonProperty("Fee4Registration")
-    private String fee4Registration;
-    @JsonProperty("Fee4Renewal")
-    private String fee4Renewal;
-    @JsonProperty("Fee4Transfer")
-    private String fee4Transfer;
-    @JsonProperty("Fee4Trade")
-    private String fee4Trade;
-    @JsonProperty("Fee4Restore")
-    private String fee4Restore;
-    @JsonProperty("Fee4TrusteeService")
-    private String fee4TrusteeService;
-    @JsonProperty("Fee4LocalContactService")
-    private String fee4LocalContactService;
     @JsonProperty("Informations")
     private String informations;
     @JsonIgnore
@@ -278,86 +254,6 @@ public class StructDomainTldInfo {
     @JsonProperty("HasDnsSec")
     public void setHasDnsSec(Integer hasDnsSec) {
         this.hasDnsSec = hasDnsSec;
-    }
-
-    @JsonProperty("FeeCurrency")
-    public String getFeeCurrency() {
-        return feeCurrency;
-    }
-
-    @JsonProperty("FeeCurrency")
-    public void setFeeCurrency(String feeCurrency) {
-        this.feeCurrency = feeCurrency;
-    }
-
-    @JsonProperty("Fee4Registration")
-    public String getFee4Registration() {
-        return fee4Registration;
-    }
-
-    @JsonProperty("Fee4Registration")
-    public void setFee4Registration(String fee4Registration) {
-        this.fee4Registration = fee4Registration;
-    }
-
-    @JsonProperty("Fee4Renewal")
-    public String getFee4Renewal() {
-        return fee4Renewal;
-    }
-
-    @JsonProperty("Fee4Renewal")
-    public void setFee4Renewal(String fee4Renewal) {
-        this.fee4Renewal = fee4Renewal;
-    }
-
-    @JsonProperty("Fee4Transfer")
-    public String getFee4Transfer() {
-        return fee4Transfer;
-    }
-
-    @JsonProperty("Fee4Transfer")
-    public void setFee4Transfer(String fee4Transfer) {
-        this.fee4Transfer = fee4Transfer;
-    }
-
-    @JsonProperty("Fee4Trade")
-    public String getFee4Trade() {
-        return fee4Trade;
-    }
-
-    @JsonProperty("Fee4Trade")
-    public void setFee4Trade(String fee4Trade) {
-        this.fee4Trade = fee4Trade;
-    }
-
-    @JsonProperty("Fee4Restore")
-    public String getFee4Restore() {
-        return fee4Restore;
-    }
-
-    @JsonProperty("Fee4Restore")
-    public void setFee4Restore(String fee4Restore) {
-        this.fee4Restore = fee4Restore;
-    }
-
-    @JsonProperty("Fee4TrusteeService")
-    public String getFee4TrusteeService() {
-        return fee4TrusteeService;
-    }
-
-    @JsonProperty("Fee4TrusteeService")
-    public void setFee4TrusteeService(String fee4TrusteeService) {
-        this.fee4TrusteeService = fee4TrusteeService;
-    }
-
-    @JsonProperty("Fee4LocalContactService")
-    public String getFee4LocalContactService() {
-        return fee4LocalContactService;
-    }
-
-    @JsonProperty("Fee4LocalContactService")
-    public void setFee4LocalContactService(String fee4LocalContactService) {
-        this.fee4LocalContactService = fee4LocalContactService;
     }
 
     @JsonProperty("Informations")
