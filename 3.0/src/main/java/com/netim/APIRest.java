@@ -1661,13 +1661,16 @@ public class APIRest implements AutoCloseable
      * 
      * @see domainPriceList API http://support.netim.com/en/wiki/DomainPriceList
      */
-    public Map<String, StructDomainPriceList> domainPriceList() throws NetimAPIException
+    public Map<String, StructDomainPriceList> domainPriceList(String tld) throws NetimAPIException
     {
         try {
             TypeReference<HashMap<String, StructDomainPriceList>> typeRef 
                 = new TypeReference<HashMap<String, StructDomainPriceList>>() {};
             ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(this.call("/tlds/price-list/", HttpVerb.GET), typeRef);
+
+			var params = new HashMap<String, Object>();
+			if(tld != null && !tld.isEmpty()) params.put("tld", tld);
+            return mapper.readValue(this.call("/tlds/price-list/", HttpVerb.GET, params), typeRef);
         }
         catch (Exception e)
         {
@@ -1675,6 +1678,11 @@ public class APIRest implements AutoCloseable
             throw new NetimAPIException(e);
         }
     }
+
+	public Map<String, StructDomainPriceList> domainPriceList() throws NetimAPIException
+	{
+		return this.domainPriceList(null);
+	}
 
     /**
      * Allows to know a domain's price 
