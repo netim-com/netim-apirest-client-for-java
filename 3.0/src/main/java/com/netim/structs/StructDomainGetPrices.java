@@ -19,17 +19,33 @@ import java.util.Map;
 @JsonPropertyOrder({
     "FeeCurrency",
     "Fee4Registration",
+	"RegistrationPromo",
+	"RegistrationPromoUntil",
     "Fee4Renewal",
+	"RenewalPromo",
+	"RenewalPromoUntil",
     "Fee4Transfer",
+	"TransferPromo",
+	"TransferPromoUntil",
     "Fee4Trade",
+	"TradePromo",
+	"TradePromoUntil",
     "Fee4TransferTrade",
+	"TransferTradePromo",
+	"TransferTradePromoUntil",
     "Fee4Restore",
+	"RestorePromo",
+	"RestorePromoUntil",
     "Fee4TrusteeService",
+	"TrusteeServicePromo",
+	"TrusteeServicePromoUntil",
     "Fee4LocalContactService",
+	"LocalContactServicePromo",
+	"LocalContactServicePromoUntil",
     "IsPremium",
 })
 
-public class StructQueryDomainPrice implements StructInterface {
+public class StructDomainGetPrices implements StructInterface {
     @JsonProperty("FeeCurrency")
     private String feeCurrency;
     @JsonProperty("Fee4Registration")

@@ -1684,22 +1684,22 @@ public class APIRest implements AutoCloseable
      * 
      * @throws NetimAPIException
      * 
-     * @return StructQueryDomainPrice
+     * @return StructDomainGetPrices
      * 
-     * @see queryDomainPrice API https://support.netim.com/en/wiki/QueryDomainPrice
+     * @see domainGetPrices API https://support.netim.com/en/wiki/domainGetPrices
      * 
      */
-    public StructQueryDomainPrice queryDomainPrice(String domain, String authID) throws NetimAPIException
+    public StructDomainGetPrices domainGetPrices(String domain, String authID) throws NetimAPIException
     {
         var params = new HashMap<String, Object>();
         domain = domain.toLowerCase();
         if(authID != null && !authID.isEmpty()) params.put("authId", authID);
-        return this.call("/domain/" + domain + "/price/", HttpVerb.GET, params, StructQueryDomainPrice.class);
+        return this.call("/domain/" + domain + "/price/", HttpVerb.GET, params, StructDomainGetPrices.class);
     }
 
-    public StructQueryDomainPrice queryDomainPrice(String domain) throws NetimAPIException
+    public StructDomainGetPrices domainGetPrices(String domain) throws NetimAPIException
     {
-        return this.queryDomainPrice(domain, null);
+        return this.domainGetPrices(domain, null);
     }
 
     /**
