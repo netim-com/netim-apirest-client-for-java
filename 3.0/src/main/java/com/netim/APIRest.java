@@ -1784,7 +1784,7 @@ public class APIRest implements AutoCloseable
         String  subdomain = "www";
         String type = "A";
         String value = "192.168.0.1";
-        StructOptionsZone options = new StructOptionsZone(null, null, 3600, null, null, null);
+        StructZoneParam options = new StructZoneParam(null, null, 3600, null, null, null);
         StructOperationResponse res = null;
         try
         {
@@ -1800,16 +1800,16 @@ public class APIRest implements AutoCloseable
      * @param subdomain subdomain
      * @param type type of DNS record. Accepted values are: 'A', 'AAAA', 'MX, 'CNAME', 'TXT', 'NS' and 'SRV'
      * @param value value of the new DNS record
-     * @param options contains multiple StructOptionsZone : settings of the new DNS record 
+     * @param options contains multiple StructZoneParam : settings of the new DNS record 
      *
      * @throws NetimAPIException
      *
      * @return StructOperationResponse giving information on the status of the operation
      *
      * @see domainZoneCreate API http://support.netim.com/en/wiki/DomainZoneCreate
-     * @see StructOptionsZone http://support.netim.com/en/wiki/StructOptionsZone
+     * @see StructZoneParam http://support.netim.com/en/wiki/StructZoneParam
      */
-    public StructOperationResponse domainZoneCreate(String domain, String subdomain, String type, String value, StructOptionsZone options) throws NetimAPIException
+    public StructOperationResponse domainZoneCreate(String domain, String subdomain, String type, String value, StructZoneParam options) throws NetimAPIException
     {
         domain = domain.toLowerCase();
         var params = new HashMap<String, Object>();
@@ -3039,15 +3039,15 @@ public class APIRest implements AutoCloseable
      * @param subdomain subdomain
      * @param type type of DNS record. Accepted values are: 'A', 'AAAA', 'MX, 'CNAME', 'TXT', 'NS and 'SRV'
      * @param value value of the new DNS record
-     * @param options StructOptionsZone : settings of the new DNS record 
+     * @param options StructZoneParam : settings of the new DNS record 
      *
      * @throws NetimAPIException
      *
      * @return StructOperationResponse giving information on the status of the operation
      *
-     * @see StructOptionsZone API http://support.netim.com/en/wiki/StructOptionsZone
+     * @see StructZoneParam API http://support.netim.com/en/wiki/StructZoneParam
      */
-    public StructOperationResponse webHostingZoneCreate(String domain, String subdomain, String type, String value, StructOptionsZone options) throws NetimAPIException
+    public StructOperationResponse webHostingZoneCreate(String domain, String subdomain, String type, String value, StructZoneParam options) throws NetimAPIException
     {
         var params = new HashMap<String, Object>();
         String fqdn = subdomain.toLowerCase() + "." + domain.toLowerCase();

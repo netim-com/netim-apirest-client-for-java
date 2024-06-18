@@ -23,7 +23,7 @@ import com.netim.structs.StructInterface;
     "port",
 })
 
-public class StructOptionsZone implements StructInterface {
+public class StructZoneParam implements StructInterface {
     @JsonProperty("service")
     private String service;
     @JsonProperty("protocol")
@@ -40,12 +40,12 @@ public class StructOptionsZone implements StructInterface {
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    public StructOptionsZone()
+    public StructZoneParam()
     { 
         this(null, null, null, null, null, null);
     }
 
-    public StructOptionsZone(String service, String protocol, Integer ttl, Integer priority, Integer weight, Integer port)
+    public StructZoneParam(String service, String protocol, Integer ttl, Integer priority, Integer weight, Integer port)
     { 
         this.service = service;
         this.protocol = protocol;

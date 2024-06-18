@@ -26,7 +26,7 @@ public class StructQueryZoneList implements StructInterface {
     @JsonProperty("value")
     private String value;
     @JsonProperty("options")
-    private StructOptionsZone options;
+    private StructZoneParam options;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -61,12 +61,12 @@ public class StructQueryZoneList implements StructInterface {
     }
 
     @JsonProperty("options")
-    public StructOptionsZone getOptions() {
+    public StructZoneParam getOptions() {
         return this.options;
     }
 
     @JsonProperty("options")
-    public void setOptions(StructOptionsZone options) {
+    public void setOptions(StructZoneParam options) {
         this.options = options;
     }
 
