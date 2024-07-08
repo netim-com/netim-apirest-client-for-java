@@ -1524,37 +1524,6 @@ public class APIRest implements AutoCloseable
     }
 
     /**
-     * Release a domain name (managed by the reseller) to its registrant (who will become a direct customer at Netim) 
-     *
-     * Example
-    
-        String domain = "myDomain.com";
-        StructOperationResponse res = null;
-        try
-        {
-            res = client.domainRelease(domain);
-        }
-        catch (NetimAPIexception exception)
-        {
-            //do something when operation had an error
-        }
-        //continue processing
-    
-     * @param domain domain name to be released
-     *
-     * @throws NetimAPIException
-     *
-     * @return StructOperationResponse giving information on the status of the operation
-     *
-     * @see domainRelease API http://support.netim.com/en/wiki/DomainRelease
-     */
-    public StructOperationResponse domainRelease(String domain) throws NetimAPIException
-    {
-        domain = domain.toLowerCase();
-        return this.call("/domain/" + domain + "/release/", HttpVerb.PATCH, StructOperationResponse.class);
-    }
-
-    /**
      * Adds a membership to the domain name 
      *
      * Example
