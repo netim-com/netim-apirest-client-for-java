@@ -1791,6 +1791,33 @@ public class APIRest implements AutoCloseable
         return this.call("/domain/" + domain + "/zone/", HttpVerb.POST, params, StructOperationResponse.class);
     }
 
+	/**
+	 * Updates a DNS record from the domain zonefile
+	 *
+	 * @param	domain		name of the domain
+	 * @param	subdomain	subdomain
+	 * @param	type		type of DNS record. Accepted values are: 'A', 'AAAA', 'MX, 'CNAME', 'TXT', 'NS' and 'SRV'
+	 * @param	value		current value of the DNS record
+	 * @param	newValue	new value of the DNS record
+	 * @param	options		contains multiple StructZoneParam : settings of the new DNS record 
+	 *
+	 * @throws	NetimAPIException
+	 *
+	 * @return	StructOperationResponse	giving information on the status of the operation
+	 */
+	public StructOperationResponse domainZoneUpdate(String domain, String subdomain, String type, String value, String newValue, StructZoneParam options) throws NetimAPIException {
+		domain = domain.toLowerCase();
+		var params = new HashMap < String,
+			Object > ();
+		params.put("subdomain", subdomain);
+		params.put("type", type);
+		params.put("value", value);
+		params.put("newValue", newValue);
+		params.put("options", options);
+
+		return this.call("/domain/" + domain + "/zone/update/", HttpVerb.PATCH, params, StructOperationResponse.class);
+	}
+
     /**
      * Deletes a DNS record into the domain's zonefile 
      *
@@ -3026,6 +3053,31 @@ public class APIRest implements AutoCloseable
 
         return this.call("/webhosting/" + fqdn + "/zone/", HttpVerb.POST, params, StructOperationResponse.class);
     }
+
+	/**
+	 * Updates a DNS record from the webhosting zonefile
+	 *
+	 * @param	domain		name of the domain
+	 * @param	subdomain	subdomain
+	 * @param	type		type of DNS record. Accepted values are: 'A', 'AAAA', 'MX, 'CNAME', 'TXT', 'NS' and 'SRV'
+	 * @param	value		current value of the DNS record
+	 * @param	newValue	new value of the DNS record
+	 * @param	options		contains multiple StructZoneParam : settings of the new DNS record 
+	 *
+	 * @throws	NetimAPIException
+	 *
+	 * @return	StructOperationResponse	giving information on the status of the operation
+	 */
+	public StructOperationResponse webHostingZoneUpdate(String domain, String subdomain, String type, String value, String newValue, StructZoneParam options) throws NetimAPIException {
+		var params = new HashMap <String, Object>();
+		String fqdn = subdomain.toLowerCase() + "." + domain.toLowerCase();
+		params.put("type", type);
+		params.put("value", value);
+		params.put("newValue", newValue);
+		params.put("options", options);
+
+		return this.call("/webhosting/" + fqdn + "/zone/", HttpVerb.PATCH, params, StructOperationResponse.class);
+	}
 
     /**
      * Deletes a DNS record into the webhosting domain zonefile

@@ -18,6 +18,7 @@ import com.netim.structs.StructInterface;
     "service",
     "protocol",
     "ttl",
+	"ttlUnit",
     "priority",
     "weight",
     "port",
@@ -30,6 +31,7 @@ public class StructZoneParam implements StructInterface {
     private String protocol;
     @JsonProperty("ttl")
     private Integer ttl;
+	@JsonProperty("ttlUnit")
     @JsonProperty("priority")
     private Integer priority;
     @JsonProperty("weight")
@@ -42,14 +44,15 @@ public class StructZoneParam implements StructInterface {
 
     public StructZoneParam()
     { 
-        this(null, null, null, null, null, null);
+		this(null, null, null, null, null, null, null);
     }
 
-    public StructZoneParam(String service, String protocol, Integer ttl, Integer priority, Integer weight, Integer port)
+    public StructZoneParam(String service, String protocol, Integer ttl, String ttlUnit, Integer priority, Integer weight, Integer port)
     { 
         this.service = service;
         this.protocol = protocol;
         this.ttl = ttl;
+		this.ttlUnit = ttlUnit;
         this.priority = priority;
         this.weight = weight;
         this.port = port;
@@ -84,6 +87,16 @@ public class StructZoneParam implements StructInterface {
     public void setTtl(Integer ttl) {
         this.ttl = ttl;
     }
+
+	@JsonProperty("ttlUnit")
+	public String getTtlUnit() {
+		return this.ttlUnit;
+	}
+
+	@JsonProperty("ttlUnit")
+	public void setTtlUnit(String ttlUnit) {
+		this.ttlUnit = ttlUnit;
+	}
 
     @JsonProperty("priority")
     public Integer getPriority() {
