@@ -3,7 +3,7 @@
   <groupId>com.netim</groupId>
   <artifactId>APIRest</artifactId>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>3.0</version>
   <name>APIRest</name>
   <url>http://maven.apache.org</url>
   <properties>
