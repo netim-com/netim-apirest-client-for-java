@@ -48,21 +48,22 @@ public class APIRest implements AutoCloseable
 	 * @throws Exception if userID, secret, url are empty or missing.
 	 *
 	 */
-	public APIRest(String userID, String secret) throws Exception {
-		InputStream in = this.getClass().getResourceAsStream("/conf.xml");
+    public APIRest(String userID, String secret) throws Exception {
 
-		ObjectMapper objectMapper = new XmlMapper();
-		TypeReference<HashMap<String, Object>> typeRef = new TypeReference<HashMap<String, Object>>() {};
+        InputStream in = new FileInputStream(new File(System.getProperty("user.dir") + "/conf.xml"));
 
-		HashMap<String, Object> conf = objectMapper.readValue(in, typeRef);
+        ObjectMapper objectMapper = new XmlMapper();
+        TypeReference<HashMap<String, Object>> typeRef = new TypeReference<HashMap<String, Object>>() {};
 
-		in.close();
+        HashMap<String, Object> conf = objectMapper.readValue(in, typeRef);
 
-		this._userID = userID;
-		this._secret = secret;
+        in.close();
 
-		this.setConf(conf);
-	}
+        this._userID = userID;
+        this._secret = secret;
+
+        this.setConf(conf);
+    }
 
 	/**
 	 * Constructor for class APIRest
@@ -70,30 +71,31 @@ public class APIRest implements AutoCloseable
 	 * @throws Exception if userID, secret, url are empty or missing in conf.
 	 *
 	 */
-	public APIRest() throws Exception {
-		File f = new File("./conf.xml");
-		ObjectMapper objectMapper = new XmlMapper();
-		TypeReference<HashMap<String, Object>> typeRef = new TypeReference<HashMap<String, Object>>() {};
-		FileInputStream fs = new FileInputStream(f);
-		HashMap<String, Object> conf = objectMapper.readValue(fs, typeRef);
+    public APIRest() throws Exception {
+        InputStream in = new FileInputStream(new File(System.getProperty("user.dir") + "/conf.xml"));
 
-		fs.close();
+        ObjectMapper objectMapper = new XmlMapper();
+        TypeReference<HashMap<String, Object>> typeRef = new TypeReference<HashMap<String, Object>>() {};
 
-		this._connected = false;
-		this._sessionID = null;
+        HashMap<String, Object> conf = objectMapper.readValue(in, typeRef);
 
-		if (!conf.containsKey("login") || conf.get("login").toString().isEmpty()) {
-			throw new NetimAPIException("Missing or empty <login> in conf file.");
-		}
-		if (!conf.containsKey("secret") || conf.get("secret").toString().isEmpty()) {
-			throw new NetimAPIException("Missing or empty <secret> in conf file.");
-		}
+        in.close();
 
-		this._userID = conf.get("login").toString();
-		this._secret = conf.get("secret").toString();
+        this._connected = false;
+        this._sessionID = null;
 
-		this.setConf(conf);
-	}
+        if (!conf.containsKey("login") || conf.get("login").toString().isEmpty()) {
+            throw new NetimAPIException("Missing or empty <login> in conf file.");
+        }
+        if (!conf.containsKey("secret") || conf.get("secret").toString().isEmpty()) {
+            throw new NetimAPIException("Missing or empty <secret> in conf file.");
+        }
+
+        this._userID = conf.get("login").toString();
+        this._secret = conf.get("secret").toString();
+
+        this.setConf(conf);
+    }
 
 	private void setConf(HashMap<String, Object> conf) throws Exception {
 		// API URL
@@ -1920,6 +1922,11 @@ public class APIRest implements AutoCloseable
         params.put("minimumUnit", minimumUnit);
 
         return this.call("/domain/" + domain + "/zone/init-soa/", HttpVerb.PATCH, params, StructOperationResponse.class);
+    }
+
+    public HashMap<String, Object> domainZoneInfo(String domain) throws NetimAPIException {
+        domain = domain.toLowerCase();
+        return this.call("/domain/" + domain + "/zone/info/", HttpVerb.GET, HashMap.class);
     }
 
     /**
