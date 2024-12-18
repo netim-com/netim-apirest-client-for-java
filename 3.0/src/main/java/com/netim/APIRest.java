@@ -1507,21 +1507,21 @@ public class APIRest implements AutoCloseable
         }
         //continue processing
     
-     * @param domain name of the domain to get the AuthID
-     * @param sendToRegistrant recipient of the AuthID. Possible value are 0 for the reseller and 1 for the registrant
+     * @param   domain    name of the domain to get the AuthID
+     * @param   sendTo    Send the authorization code to 0: Reseller, 1: Registrant, 2: None
      *
      * @throws NetimAPIException
      *
      * @return StructOperationResponse giving information on the status of the operation
      *
-     * @see domainAuthID API http://support.netim.com/en/wiki/DomainAuthID
+     * @see domainAuthID API https://support.netim.com/en/docs/api-rest-3-0/domain-names/send-authid
      */
-    public StructOperationResponse domainAuthID(String domain, int sendToRegistrant) throws NetimAPIException
+    public StructOperationResponse domainAuthID(String domain, int sendTo) throws NetimAPIException
     {
         domain = domain.toLowerCase();
 
         HashMap<String, String> params = new HashMap<String, String>();
-        params.put("sendtoregistrant", String.valueOf(sendToRegistrant));
+        params.put("sendto", String.valueOf(sendTo));
         return this.call("/domain/" + domain + "/authid/", HttpVerb.PATCH, params, StructOperationResponse.class);
     }
 
