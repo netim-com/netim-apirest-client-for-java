@@ -75,7 +75,7 @@ public class StructDomainInfo implements StructInterface {
     @JsonProperty("authID")
     private String authID;
     @JsonProperty("DNSSEC")
-    private Map<String, String> DNSSEC;
+    private Object DNSSEC;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -260,12 +260,12 @@ public class StructDomainInfo implements StructInterface {
     }
 
     @JsonProperty("DNSSEC")
-    public Map<String, String> getDNSSEC() {
+    public Map<String, Object> getDNSSEC() {
         return DNSSEC;
     }
 
     @JsonProperty("DNSSEC")
-    public void setDNSSEC(Map<String,String> DNSSEC) {
+    public void setDNSSEC(Map<String,Object> DNSSEC) {
         this.DNSSEC = DNSSEC;
     }
 

@@ -9,6 +9,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.lang.AutoCloseable;
+import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -247,6 +248,10 @@ public class APIRest implements AutoCloseable
                     = new TypeReference<HashMap<String,String>>() {};
 
                 HashMap<String,String> res = mapper.readValue(input, typeRef);
+
+                System.out.println("STATUS: " + status_code);
+                System.out.println("INPUT: " + input);
+                System.out.println("ERR: " + res.toString());
                 
                 this._lastError = res.get("message");
                 throw new NetimAPIException(res.get("message"));
@@ -1593,35 +1598,74 @@ public class APIRest implements AutoCloseable
     }
 
     /**
-     * Allows to sign a domain name with DNSSEC if it doesn't use NETIM DNS servers 
-     * 
-     * @param domain name of the domain
-     * @param DSRecords A StructDSRecord object 
-     * @param flags
-     * @param protocol
-     * @param algo
-     * @param pubKeys
-     * 
-     * @throws NetimAPIException
-     * 
-     * @return StructOperationResponse giving information on the status of the operation
-     * 
-     * @see domainSetDNSSecExt API http://support.netim.com/en/wiki/DomainSetDNSSecExt
+     * Add DS records to a domain if it does not use NETIM’s DNS servers.
+     *
+     * @param   domain              Domain name
+     * @param   DSRecords           Array of dsData or keyData
+     *
+     * @throws  NetimAPIException   Information about the operation status
+     *
+     * @return  StructOperationResponse
+     *
+     * @see     https://support.netim.com/en/docs/api-rest-3-0/domain-names/ds-record-create
      */
-    public StructOperationResponse domainSetDNSSecExt(String domain, List<StructDSRecord> DSRecords, int flags, int protocol, int algo, String pubKey) throws NetimAPIException
-    {
+    public StructOperationResponse domainDSRecordCreate(String domain, HashMap<String, Object> data) throws NetimAPIException {
         domain = domain.toLowerCase();
-
         var params = new HashMap<String, Object>();
-        params.put("DSRecords", DSRecords);
-        params.put("flags", flags);
-        params.put("protocol", protocol);
-        params.put("algo", algo);
-        params.put("pubKey", pubKey);
-
-        return this.call("/domain/" + domain + "/dnssec/", HttpVerb.PATCH, params, StructOperationResponse.class);
+        params.put("data", data);
+        return this.call("/domain/" + domain + "/ds-record/", HttpVerb.POST, params, StructOperationResponse.class);
     }
 
+    /**
+     * Remove DS records from a domain if it does not use NETIM’s DNS servers.
+     *
+     * @param   domain              Domain name
+     * @param   data                Array of dsData or keyData
+     *
+     * @throws  NetimAPIException   Information about the operation status
+     *
+     * @return  StructOperationResponse
+     *
+     * @see     https://support.netim.com/en/docs/api-rest-3-0/domain-names/ds-record-delete
+     */
+    public StructOperationResponse domainDSRecordDelete(String domain, HashMap<String, Object> data) throws NetimAPIException {
+        domain = domain.toLowerCase();
+        var params = new HashMap<String, Object>();
+        params.put("data", data);
+        return this.call("/domain/" + domain + "/ds-record/", HttpVerb.DELETE, params, StructOperationResponse.class);
+    }
+
+    /**
+     * Remove all DS records from a domain if it does not use NETIM’s DNS servers.
+     *
+     * @param   domain              Domain name
+     *
+     * @throws  NetimAPIException   Information about the operation status
+     *
+     * @return  StructOperationResponse
+     *
+     * @see     https://support.netim.com/en/docs/api-rest-3-0/domain-names/ds-record-delete-all
+     */
+    public StructOperationResponse domainDSRecordDeleteAll(String domain) throws NetimAPIException {
+        domain = domain.toLowerCase();
+        return this.call("/domain/" + domain + "/ds-record/", HttpVerb.DELETE, StructOperationResponse.class);
+    }
+
+    /**
+     * List DS records of a domain if it does not use NETIM’s DNS servers.
+     *
+     * @param   domain              Domain name
+     *
+     * @throws  NetimAPIException   Information about the operation status
+     *
+     * @return  HashMap             Array of dsData or KeyData
+     *
+     * @see     https://support.netim.com/en/docs/api-rest-3-0/domain-names/ds-record-list
+     */
+    public ArrayList<Object> domainDSRecordList(String domain) throws NetimAPIException {
+        domain = domain.toLowerCase();
+        return this.call("/domain/" + domain + "/ds-record/", HttpVerb.GET, ArrayList.class);
+    }
 
     /**
      * Returns the list of all prices for each tld 
