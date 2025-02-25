@@ -1973,6 +1973,15 @@ public class APIRest implements AutoCloseable
         return this.call("/domain/" + domain + "/zone/info/", HttpVerb.GET, HashMap.class);
     }
 
+    public HashMap<String, Object> domainZoneCheck(String domain, HashMap<Integer, Object> nameservers) throws NetimAPIException {
+        domain = domain.toLowerCase();
+
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("nameservers", nameservers);
+
+        return this.call("/domain/" + domain + "/zone/check/", HttpVerb.POST, params, HashMap.class);
+    }
+
     /**
      * Returns all DNS records of a domain name 
      * 
