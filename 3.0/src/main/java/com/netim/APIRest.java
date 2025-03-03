@@ -2305,6 +2305,21 @@ public class APIRest implements AutoCloseable
     }
 
     /**
+     * List DS records of a domain if it does not use NETIM’s DNS servers.
+     *
+     * @param   domain              Domain name
+     *
+     * @throws  NetimAPIException   Information about the operation status
+     *
+     * @return  HashMap             array
+     */
+    public ArrayList<Object> sslList(HashMap<String, Object> filters) throws NetimAPIException {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("filters", filters);
+        return call("ssl/list/", HttpVerb.POST, params, ArrayList.class);
+    }
+
+    /**
      * Creates a web hosting
      * 
      * @param fqdn Fully qualified domain of the main vhost. Warning, the secondary vhosts will always be subdomains of this FQDN
