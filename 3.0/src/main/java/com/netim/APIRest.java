@@ -3175,4 +3175,10 @@ public class APIRest implements AutoCloseable
 
         return this.call("/webhosting/" + fqdn + "/zone/", HttpVerb.DELETE, params, StructOperationResponse.class);
     }
+
+    public ArrayList<Object> brandProtectionList(HashMap<String, Object> filters) throws NetimAPIException {
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("filters", filters);
+        return call("brandprotection/list/", HttpVerb.POST, params, ArrayList.class);
+    }
 }
