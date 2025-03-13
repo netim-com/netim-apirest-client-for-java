@@ -22,7 +22,7 @@ import com.netim.structs.StructInterface;
     "options",
 })   
 
-public class StructQueryWebFwdList implements StructInterface {
+public class StructDomainWebFwdList implements StructInterface {
     @JsonProperty("FQDN")
     private String fqdn;
     @JsonProperty("type")

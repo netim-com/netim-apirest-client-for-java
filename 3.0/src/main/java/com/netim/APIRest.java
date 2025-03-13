@@ -494,15 +494,13 @@ public class APIRest implements AutoCloseable
      * Returns the list of parameters reseller account
      *
      *
-     * @return A structure of StructQueryResellerAccount containing the information
+     * @return A structure of StructAccountInfo containing the information
      * 
      * @throws NetimAPIException
-     *
-     * @see queryResellerAccount API https://support.netim.com/en/wiki/QueryResellerAccount
      */
-    public StructQueryResellerAccount queryResellerAccount() throws NetimAPIException
+    public StructAccountInfo accountInfo() throws NetimAPIException
     {
-        return call("account/", HttpVerb.GET, StructQueryResellerAccount.class);
+        return call("account/", HttpVerb.GET, StructAccountInfo.class);
     }
 
     // -------------------------------------------------
@@ -1734,10 +1732,8 @@ public class APIRest implements AutoCloseable
      * 
      * @return false: no claim ; true: at least one claim
      * 
-     * @see queryDomainClaim API https://support.netim.com/en/wiki/QueryDomainClaim
-     * 
      */
-    public boolean queryDomainClaim(String domain) throws NetimAPIException
+    public boolean domainCheckClaims(String domain) throws NetimAPIException
     {
         domain = domain.toLowerCase();
         return this.call("/domain/" + domain + "/claim/", HttpVerb.GET, Boolean.class);
@@ -1989,15 +1985,13 @@ public class APIRest implements AutoCloseable
      * 
      * @throws NetimAPIException
      * 
-     * @return An array of StructQueryZoneList
-     *
-     * @see StructQueryZoneList[] API https://support.netim.com/en/wiki/QueryZoneList
+     * @return An array of StructDomainZoneList
      *
      */
-    public StructQueryZoneList[] queryZoneList(String domain) throws NetimAPIException
+    public StructDomainZoneList[] domainZoneList(String domain) throws NetimAPIException
     {
         domain = domain.toLowerCase();
-        return this.call("/domain/" + domain + "/zone/", HttpVerb.GET, StructQueryZoneList[].class);
+        return this.call("/domain/" + domain + "/zone/", HttpVerb.GET, StructDomainZoneList[].class);
     }
 
     /**
@@ -2074,14 +2068,12 @@ public class APIRest implements AutoCloseable
      * 
      * @throws NetimAPIException
      * 
-     * @return array An array of StructQueryMailFwdList
-     * 
-     * @see queryMailFwdList API https://support.netim.com/en/wiki/QueryMailFwdList
+     * @return array An array of StructDomainMailFwdList
      */
-    public StructQueryMailFwdList[] queryMailFwdList(String domain) throws NetimAPIException
+    public StructDomainMailFwdList[] domainMailFwdList(String domain) throws NetimAPIException
     {
         domain = domain.toLowerCase();
-        return this.call("/domain/" + domain + "/mail-forwardings/", HttpVerb.GET, StructQueryMailFwdList[].class);
+        return this.call("/domain/" + domain + "/mail-forwardings/", HttpVerb.GET, StructDomainMailFwdList[].class);
     }
 
     /**
@@ -2164,16 +2156,13 @@ public class APIRest implements AutoCloseable
      * 
      * @throws NetimAPIException
      * 
-     * @return array An array of StructQueryWebFwdList
-     *
-     * @see queryWebFwdList API https://support.netim.com/en/wiki/QueryWebFwdList
-     * @see StructQueryWebFwdList https://support.netim.com/fr/wiki/StructQueryWebFwdList
+     * @return array An array of StructDomainWebFwdList
      *
      */
-    public StructQueryWebFwdList[] queryWebFwdList(String domain) throws NetimAPIException
+    public StructDomainWebFwdList[] domainWebFwdList(String domain) throws NetimAPIException
     {
         domain = domain.toLowerCase();
-        return this.call("/domain/" + domain + "/web-forwardings/", HttpVerb.GET, StructQueryWebFwdList[].class);
+        return this.call("/domain/" + domain + "/web-forwardings/", HttpVerb.GET, StructDomainWebFwdList[].class);
     }
 
     /**
@@ -3096,11 +3085,11 @@ public class APIRest implements AutoCloseable
      * 
      * @throws NetimAPIException
      * 
-     * @return StructQueryZoneList[]
+     * @return StructDomainZoneList[]
      */
-    public StructQueryZoneList[] webHostingZoneList(String fqdn) throws NetimAPIException
+    public StructDomainZoneList[] webHostingZoneList(String fqdn) throws NetimAPIException
     {
-        return this.call("/webhosting/" + fqdn + "/zone/", HttpVerb.GET, StructQueryZoneList[].class);
+        return this.call("/webhosting/" + fqdn + "/zone/", HttpVerb.GET, StructDomainZoneList[].class);
     }
 
     /**

@@ -20,7 +20,7 @@ import java.util.Map;
 "install",
 })
 
-public class StructQueryMailFwdList implements StructInterface {
+public class StructDomainMailFwdList implements StructInterface {
     @JsonProperty("mailBox")
     private String mailBox;
     @JsonProperty("recipients")

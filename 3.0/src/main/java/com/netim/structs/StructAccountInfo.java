@@ -29,7 +29,7 @@ import java.util.Map;
     "DEFAULT_DNS_TEMPLATE"
 })
 
-public class StructQueryResellerAccount implements StructInterface {
+public class StructAccountInfo implements StructInterface {
 
     @JsonProperty("BALANCE_AMOUNT")
     private String balanceAmount;

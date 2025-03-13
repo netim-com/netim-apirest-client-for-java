@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 "options",
 })
 
-public class StructQueryZoneList implements StructInterface {
+public class StructDomainZoneList implements StructInterface {
     @JsonProperty("host")
     private String host;
     @JsonProperty("type")
