@@ -27,8 +27,8 @@ public class APIRest implements AutoCloseable
     private boolean _connected;
     public String _sessionID;
 
-    private String _userID;
-    private String _secret;
+    private String _name;
+    private String _key;
     private String _apiURL;
 
     private Object _lastRequestParams;
@@ -43,13 +43,13 @@ public class APIRest implements AutoCloseable
 	/**
 	 * Constructor for class APIRest
 	 *
-	 * @param userID the ID the client uses to connect to his NETIM account
-	 * @param secret the SECRET the client uses to connect to his NETIM account
+	 * @param   name    API user name
+	 * @param   key     API key
 	 *
-	 * @throws Exception if userID, secret, url are empty or missing.
+	 * @throws Exception if name, key, url are empty or missing.
 	 *
 	 */
-    public APIRest(String userID, String secret) throws Exception {
+    public APIRest(String name, String key) throws Exception {
 
         InputStream in = new FileInputStream(new File(System.getProperty("user.dir") + "/conf.xml"));
 
@@ -60,8 +60,8 @@ public class APIRest implements AutoCloseable
 
         in.close();
 
-        this._userID = userID;
-        this._secret = secret;
+        this._name = name;
+        this._key = key;
 
         this.setConf(conf);
     }
@@ -69,7 +69,7 @@ public class APIRest implements AutoCloseable
 	/**
 	 * Constructor for class APIRest
 	 *
-	 * @throws Exception if userID, secret, url are empty or missing in conf.
+	 * @throws Exception if name, key, url are empty or missing in conf.
 	 *
 	 */
     public APIRest() throws Exception {
@@ -85,15 +85,15 @@ public class APIRest implements AutoCloseable
         this._connected = false;
         this._sessionID = null;
 
-        if (!conf.containsKey("login") || conf.get("login").toString().isEmpty()) {
-            throw new NetimAPIException("Missing or empty <login> in conf file.");
+        if (!conf.containsKey("name") || conf.get("name").toString().isEmpty()) {
+            throw new NetimAPIException("Missing or empty <name> in conf file.");
         }
-        if (!conf.containsKey("secret") || conf.get("secret").toString().isEmpty()) {
-            throw new NetimAPIException("Missing or empty <secret> in conf file.");
+        if (!conf.containsKey("key") || conf.get("key").toString().isEmpty()) {
+            throw new NetimAPIException("Missing or empty <key> in conf file.");
         }
 
-        this._userID = conf.get("login").toString();
-        this._secret = conf.get("secret").toString();
+        this._name = conf.get("name").toString();
+        this._key = conf.get("key").toString();
 
         this.setConf(conf);
     }
@@ -154,7 +154,7 @@ public class APIRest implements AutoCloseable
             HttpResponse response;
             if(this.isSessionOpen(ressource, httpVerb))
             {
-                String auth = this._userID + ":" + this._secret;
+                String auth = this._name + ":" + this._key;
                 byte[] encodedAuth = Base64.getEncoder().encode(auth.getBytes(StandardCharsets.UTF_8));
 
 				String language = "EN";
