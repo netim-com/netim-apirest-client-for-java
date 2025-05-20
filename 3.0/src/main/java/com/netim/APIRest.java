@@ -1765,6 +1765,20 @@ public class APIRest implements AutoCloseable
     }
 
     /**
+     * Returns informations about a domain product
+     * 
+     * @param   tld domain tld
+     * 
+     * @throws  NetimAPIException
+     * 
+     * @return  HashMap Informations about a domain product
+     */
+    public HashMap<String, Object> domainProductInfo(String tld) throws NetimAPIException {
+        tld = domain.toLowerCase();
+        return this.call("/domains/product/" + tld + "/", HttpVerb.GET, HashMap.class);
+    }
+
+    /**
      * Resets all DNS settings from a template 
      * 
      * @param domain Domain name
@@ -2306,6 +2320,20 @@ public class APIRest implements AutoCloseable
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("filters", filters);
         return call("ssl/list/", HttpVerb.POST, params, ArrayList.class);
+    }
+
+    /**
+     * Returns informations about a SSL product
+     * 
+     * @param   product SSL product
+     * 
+     * @throws  NetimAPIException
+     * 
+     * @return  HashMap   Informations about a domain product
+     */
+    public HashMap<String, Object> sslProductInfo(String product) throws NetimAPIException {
+        product = product.toUpperCase();
+        return this.call("/ssl/product/" + product + "/", HttpVerb.GET, HashMap.class);
     }
 
     /**
