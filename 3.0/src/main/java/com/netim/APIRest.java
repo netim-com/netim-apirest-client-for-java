@@ -1565,37 +1565,6 @@ public class APIRest implements AutoCloseable
     }
 
     /**
-     * Returns all available operations for a given TLD 
-     * 
-     * Example:
-        
-        StructDomainTldInfo res = null;
-        try
-        {
-            res = client.domainTldInfo("COM"); //or 'com'
-        }
-        catch (NetimAPIexception exception)
-        {
-            //do something about the error
-        }
-
-        domainInfo = res;
-        //continue processing
-        
-     * @param tld a valid tld without the dot before it
-     *
-     * @throws NetimAPIException
-     *
-     * @return StructDomainTldInfo information about the tld
-     *
-     * @see domainTldInfo API http://support.netim.com/fr/wiki/DomainTldInfo
-     */
-    public StructDomainTldInfo domainTldInfo(String tld) throws NetimAPIException
-    {
-        return this.call("/tld/" + tld + "/", HttpVerb.GET, StructDomainTldInfo.class);
-    }
-
-    /**
      * Add DS records to a domain if it does not use NETIM’s DNS servers.
      *
      * @param   domain              Domain name
