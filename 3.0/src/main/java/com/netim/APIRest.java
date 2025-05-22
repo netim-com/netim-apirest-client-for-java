@@ -1529,42 +1529,6 @@ public class APIRest implements AutoCloseable
     }
 
     /**
-     * Adds a membership to the domain name 
-     *
-     * Example
-    
-        domain = "myDomain.com";
-        token = "qmksjdmqsjdmkl"; //replace with your token here
-        StructOperationResponse res = null;
-        try
-        {
-            res = client.domainSetMembership(domain, token);
-        }
-        catch (NetimAPIexception exception)
-        {
-            //do something when operation had an error
-        }
-        //continue processing
-    
-     * @param domain name of domain
-     * @param token membership number into the community
-     *
-     * @throws NetimAPIException
-     *
-     * @return StructOperationResponse giving information on the status of the operation
-     *
-     * @see domainSetMembership API http://support.netim.com/en/wiki/DomainSetMembership
-     */
-    public StructOperationResponse domainSetMembership(String domain, String token) throws NetimAPIException
-    {
-        domain = domain.toLowerCase();
-
-        HashMap<String, String> params = new HashMap<String, String>();
-        params.put("token", String.valueOf(token));
-        return this.call("/domain/" + domain + "/membership/", HttpVerb.PATCH, params, StructOperationResponse.class);
-    }
-
-    /**
      * Add DS records to a domain if it does not use NETIM’s DNS servers.
      *
      * @param   domain              Domain name
