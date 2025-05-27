@@ -248,10 +248,6 @@ public class APIRest implements AutoCloseable
                     = new TypeReference<HashMap<String,String>>() {};
 
                 HashMap<String,String> res = mapper.readValue(input, typeRef);
-
-                System.out.println("STATUS: " + status_code);
-                System.out.println("INPUT: " + input);
-                System.out.println("ERR: " + res.toString());
                 
                 this._lastError = res.get("message");
                 throw new NetimAPIException(res.get("message"));
@@ -3126,9 +3122,149 @@ public class APIRest implements AutoCloseable
         return this.call("/webhosting/" + fqdn + "/zone/", HttpVerb.DELETE, params, StructOperationResponse.class);
     }
 
+
+    /**
+     * Create a new brand protection
+     *
+     * @param label    Brand main label
+     * @param product  Brand protection product ID
+     * @param duration Period of validity in years
+     * @param idOwner  ID of the owner contact
+     * @param type     Brand’s type
+     * @param infos    Array of strings containing brand data
+     *
+     * @return StructOperationResponse
+     *
+     * @see https://support.netim.com/en/docs/api-rest-3-0/brand-protections/create-protection
+     */
+    public StructOperationResponse brandProtectionCreate(String label, String product, Integer duration, String idOwner, String type, HashMap<String, String> infos) throws NetimAPIException {
+        var params = new HashMap<String, Object>();
+        params.put("label", label);
+        params.put("prod", product);
+        params.put("duration", duration);
+        params.put("idOwner", idOwner);
+        params.put("type", type);
+        params.put("infos", infos);
+
+        return this.call("brandprotection/", HttpVerb.POST, params, StructOperationResponse.class);
+    }
+
+    /**
+     * Return all information about a brand protection
+     *
+     * @param id Brand protection ID
+     *
+     * @return HashMap
+     * 
+     * @see https://support.netim.com/en/docs/api-rest-3-0/brand-protections/get-protection-information
+     */
+    public HashMap<String, Object> brandProtectionInfo(String id) throws NetimAPIException {
+        return this.call("brandprotection/" + id + "/", HttpVerb.GET, HashMap.class);
+    }
+
+    
+    /**
+     * Return all information about a brand protection product
+     *
+     * @param id Brand protection product ID
+     *
+     * @return HashMap
+     * 
+     * @see https://support.netim.com/en/docs/api-rest-3-0/brand-protections/get-product-information
+     */
+    public HashMap<String, Object> brandProtectionProductInfo(String product) throws NetimAPIException {
+        return this.call("brandprotection/product/" + product + "/", HttpVerb.GET, HashMap.class);
+    }
+
+    /**
+     * List brand protections matching filters
+     *
+     * @param filters Search filters
+     *
+     * @return ArrayList
+     *
+     * @see https://support.netim.com/en/docs/api-rest-3-0/brand-protections/get-protection-list
+     */
     public ArrayList<Object> brandProtectionList(HashMap<String, Object> filters) throws NetimAPIException {
-        HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("filters", filters);
-        return call("brandprotection/list/", HttpVerb.POST, params, ArrayList.class);
+        if (filters.isEmpty()) {
+            return this.call("/brandprotection/list/", HttpVerb.POST, new HashMap<String, Object>(), ArrayList.class);
+
+        } else {
+            HashMap<String, Object> params = new HashMap<String, Object>();
+            params.put("filters", filters);
+
+            return this.call("/brandprotection/list/", HttpVerb.POST, params, ArrayList.class);
+        }
+    }
+
+    /**
+     * Request the transfer of the ownership to another party
+     *
+     * @param id      Brand protection ID
+     * @param idOwner ID of the owner contact
+     *
+     * @return StructOperationResponse
+     * 
+     * @see https://support.netim.com/en/docs/api-rest-3-0/brand-protections/change-owner-of-protection
+     */
+    public StructOperationResponse brandProtectionTransferOwner(String id, String idOwner) throws NetimAPIException {
+        var params = new HashMap<String, Object>();
+        params.put("idOwner", idOwner);
+
+        return this.call("brandprotection/" + id + "/", HttpVerb.PUT, params, StructOperationResponse.class);
+    }
+
+    /**
+     * Renew a brand protection for a new period
+     *
+     * @param id       Brand protection ID
+     * @param duration Duration in years.
+     *
+     * @return StructOperationResponse
+     * 
+     * @see https://support.netim.com/en/docs/api-rest-3-0/brand-protections/renew-protection
+     */
+    public StructOperationResponse brandProtectionRenew(String id, Integer duration) throws NetimAPIException {
+        var params = new HashMap<String, Object>();
+        params.put("duration", duration);
+
+        return this.call("brandprotection/" + id + "/renew/", HttpVerb.PATCH, params, StructOperationResponse.class);
+    }
+
+    /**
+     * Delete a brand protection
+     *
+     * @param id Brand protection ID
+     *
+     * @return StructOperationResponse
+     * 
+     * @see https://support.netim.com/en/docs/api-rest-3-0/brand-protections/renew-protection
+     */
+    public StructOperationResponse brandProtectionRenew(String id) throws NetimAPIException {
+        var params = new HashMap<String, Object>();
+        params.put("duration", duration);
+
+        return this.call("brandprotection/" + id + "/", HttpVerb.DELETE, StructOperationResponse.class);
+    }
+
+    /**
+     * Set brand protection preference
+     *
+     * @param id       Brand protection ID
+     * @param codePref Preference to update ("auto_renew", "to_be_renewed")
+     * @param enable   "0" to disable, "1" to enable.
+     *
+     * @return StructOperationResponse
+     * 
+     * @see https://support.netim.com/en/docs/api-rest-3-0/brand-protections/set-auto-renew
+     * @see https://support.netim.com/en/docs/api-rest-3-0/brand-protections/set-to-be-renewed
+     */
+    public StructOperationResponse brandProtectionRenew(String id, String codePref, String enable)
+            throws NetimAPIException {
+        var params = new HashMap<String, Object>();
+        params.put("codePref", codePref);
+        params.put("value", enable);
+
+        return this.call("brandprotection/" + id + "/preference/", HttpVerb.PATCH, params, StructOperationResponse.class);
     }
 }
