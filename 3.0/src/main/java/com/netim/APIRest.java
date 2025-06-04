@@ -2252,6 +2252,24 @@ public class APIRest implements AutoCloseable
     }
 
     /**
+     * Returns the list of all prices for SSL products
+     * 
+     * @param   product SSL product ID
+     * 
+     * @throws  NetimAPIException
+     * 
+     * @return  Price list
+     */
+    public HashMap<String, Object> sslPriceList(String product) throws NetimAPIException {
+        product = product.toUpperCase();
+        return this.call("/ssl/price/" + product, HttpVerb.GET, HashMap.class);
+    }
+
+    public HashMap<String, Object> sslPriceList() throws NetimAPIException {
+        return this.call("/ssl/price/", HttpVerb.GET, HashMap.class);
+    }
+
+    /**
      * Returns informations about a SSL product
      * 
      * @param   product SSL product
@@ -3195,6 +3213,24 @@ public class APIRest implements AutoCloseable
 
             return this.call("/brandprotection/list/", HttpVerb.POST, params, ArrayList.class);
         }
+    }
+
+    /**
+     * Returns the list of all prices for brand protections products
+     * 
+     * @param   product Brand protections product ID
+     *
+     * @return HashMap
+     *
+     * @see https://support.netim.com/en/docs/api-rest-3-0/brand-protections/get-protection-list
+     */
+    public HashMap<String, Object> brandProtectionPriceList(String product) throws NetimAPIException {
+        product = product.toUpperCase();
+        return this.call("/brandprotection/price/" + product, HttpVerb.GET, HashMap.class);
+    }
+
+    public HashMap<String, Object> brandProtectionPriceList() throws NetimAPIException {
+        return this.call("/brandprotection/price/", HttpVerb.GET, HashMap.class);
     }
 
     /**
