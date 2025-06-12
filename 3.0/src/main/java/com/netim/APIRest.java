@@ -1922,22 +1922,6 @@ public class APIRest implements AutoCloseable
     }
 
     /**
-     * Returns all DNS records of a domain name 
-     * 
-     * @param domain Domain name
-     * 
-     * @throws NetimAPIException
-     * 
-     * @return An array of StructDomainZoneList
-     *
-     */
-    public StructDomainZoneList[] domainZoneList(String domain) throws NetimAPIException
-    {
-        domain = domain.toLowerCase();
-        return this.call("/domain/" + domain + "/zone/", HttpVerb.GET, StructDomainZoneList[].class);
-    }
-
-    /**
      * Creates an email address forwarded to recipients
      *
      * Example
