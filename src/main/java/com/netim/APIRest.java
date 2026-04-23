@@ -1196,7 +1196,7 @@ public class APIRest implements AutoCloseable
         params.put("ns4", ns4);
         params.put("ns5", ns5);
 
-        return this.call("/domain/" + domain + "/internal-transfer/", HttpVerb.PATCH, params, StructOperationResponse.class);
+        return this.call("/domain/" + domain + "/internal-transfer/", HttpVerb.POST, params, StructOperationResponse.class);
     }
 
     /**
@@ -2749,7 +2749,7 @@ public class APIRest implements AutoCloseable
     {
         var params = new HashMap<String, Object>();
         params.put("action", action);
-        params.put("fparams", fparams);
+        params.put("params", fparams);
 
         return this.call("/webhosting/" + id + "/database/", HttpVerb.PATCH, params, StructOperationResponse.class);
     }
