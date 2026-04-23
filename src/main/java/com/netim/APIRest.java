@@ -1830,6 +1830,7 @@ public class APIRest implements AutoCloseable
         var params = new HashMap<String, Object>();
         params.put("subdomain", subdomain);
         params.put("type", type);
+        params.put("value", value);
 
         return this.call("/domain/" + domain + "/zone/", HttpVerb.DELETE, params, StructOperationResponse.class);
     }
