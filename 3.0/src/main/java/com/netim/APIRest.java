@@ -2027,14 +2027,11 @@ public class APIRest implements AutoCloseable
      * @param fqdn hostname (fully qualified domain name)
      * @param target target of the web forwarding
      * @param type type of the web forwarding. Accepted values are: "DIRECT", "IP", "MASKED" or "PARKING"
-     * @param options contains StructOptionsFwd : settings of the web forwarding. An array with keys: header, protocol, title and parking.
+     * @param options contains StructOptionsFwd : settings of the web forwarding. An array with keys: header, protocol, title, parking and https.
      *
      * @throws NetimAPIException
      *
      * @return StructOperationResponse giving information on the status of the operation
-     *
-     * @see domainWebFwdCreate API http://support.netim.com/en/wiki/DomainWebFwdCreate
-     * @see StructOptionsFwd http://support.netim.com/en/wiki/StructOptionsFwd
      */
     public StructOperationResponse domainWebFwdCreate(String fqdn, String target, String type, StructOptionsFwd options) throws NetimAPIException
     {
@@ -2044,6 +2041,46 @@ public class APIRest implements AutoCloseable
         params.put("options", options);
 
         return this.call("/domain/" + fqdn + "/web-forwarding/", HttpVerb.POST, params, StructOperationResponse.class);
+    }
+
+	/**
+	 * Updates a web forwarding 
+	 * 
+	 * Example
+	
+		String fqdn = "subdomain.myDomain.com";
+		String target = "myDomain.com";
+		String type = "DIRECT";
+		StructOptionsFwd options = new StructOptionsFwd(301, "ftp", "", "", true);
+		
+		StructOperationResponse res = null;
+		try
+		{
+			res = client.domainWebFwdUpdate(fqdn, target, type, options);
+		}
+		catch (NetimAPIexception exception)
+		{
+			//do something when operation had an error
+		}
+		//continue processing
+	 *
+	 * @param fqdn hostname (fully qualified domain name)
+	 * @param target target of the web forwarding
+	 * @param type type of the web forwarding. Accepted values are: "DIRECT", "IP", "MASKED" or "PARKING"
+	 * @param options contains StructOptionsFwd : settings of the web forwarding. An array with keys: header, protocol, title, parking and https.
+	 *
+	 * @throws NetimAPIException
+	 *
+	 * @return StructOperationResponse giving information on the status of the operation
+	 */
+	public StructOperationResponse domainWebFwdUpdate(String fqdn, String target, String type, StructOptionsFwd options) throws NetimAPIException
+	{
+		var params = new HashMap<String, Object>();
+		params.put("target", target);
+		params.put("type", type.toUpperCase());
+		params.put("options", options);
+
+        return this.call("/domain/" + fqdn + "/web-forwarding/", HttpVerb.PATCH, params, StructOperationResponse.class);
     }
 
     /**

@@ -19,6 +19,7 @@ import com.netim.structs.StructInterface;
     "protocol",
     "title",
     "parking",
+	"https"
 })
 
 public class StructOptionsFwd implements StructInterface {
@@ -30,20 +31,23 @@ public class StructOptionsFwd implements StructInterface {
     private String title;
     @JsonProperty("parking")
     private String parking;
+	@JsonProperty("https")
+    private Boolean https;
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     public StructOptionsFwd() {
-        this(null, null, null, null);
+        this(null, null, null, null, null);
     }
 
-    public StructOptionsFwd(Integer header, String protocol, String title, String parking) {
+    public StructOptionsFwd(Integer header, String protocol, String title, String parking, Boolean https) {
         this.header = header;
         this.protocol = protocol;
         if (this.protocol != null) this.protocol = this.protocol.toLowerCase();
         this.title = title;
         this.parking = parking;
+        this.https = https;
     }
 
     @JsonProperty("header")
@@ -85,6 +89,16 @@ public class StructOptionsFwd implements StructInterface {
     public void setParking(String parking) {
         this.parking = parking;
     }
+
+	@JsonProperty("https")
+	public Boolean getHttps() {
+		return this.https;
+	}
+
+	@JsonProperty("https")
+	public void setHttps(Boolean https) {
+		this.https = https;
+	}
 
     @JsonAnyGetter
     public Map<String,Object> getAdditionalProperties() {
