@@ -1783,6 +1783,7 @@ public class APIRest implements AutoCloseable
     public StructOperationResponse domainZoneCreate(String domain, String subdomain, String type, String value, StructOptionsZone options) throws NetimAPIException
     {
         domain = domain.toLowerCase();
+        if(subdomain == null) subdomain = "";
         var params = new HashMap<String, Object>();
         params.put("subdomain", subdomain);
         params.put("type", type);
@@ -1827,6 +1828,7 @@ public class APIRest implements AutoCloseable
     public StructOperationResponse domainZoneDelete(String domain, String subdomain, String type, String value) throws NetimAPIException
     {
         domain = domain.toLowerCase();
+        if(subdomain == null) subdomain = "";
         var params = new HashMap<String, Object>();
         params.put("subdomain", subdomain);
         params.put("type", type);
